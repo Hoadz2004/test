@@ -1,0 +1,122 @@
+<div class="page-container">
+    <h2>Quản lý Người dùng</h2>
+
+    <div class="filters">
+        <mat-form-field appearance="outline">
+            <mat-label>Tìm kiếm (User, Tên)</mat-label>
+            <input matInput [(ngModel)]="filterKeyword" (keyup.enter)="applyFilter()">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>Vai trò</mat-label>
+            <mat-select [(ngModel)]="filterRole" (selectionChange)="applyFilter()">
+                <mat-option value="">Tất cả</mat-option>
+                <mat-option value="ADMIN">Admin</mat-option>
+                <mat-option value="SINHVIEN">Sinh Viên</mat-option>
+                <mat-option value="GIANGVIEN">Giảng Viên</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="applyFilter()">Lọc</button>
+        <button mat-stroked-button color="accent" (click)="isCreating = !isCreating">
+            {{ isCreating ? 'Hủy' : '+ Thêm Mới' }}
+        </button>
+    </div>
+
+    <!-- Simplified Create User Form -->
+    <mat-card *ngIf="isCreating" class="create-box">
+        <h3>Thêm Tài khoản Mới</h3>
+        <p class="help-text">Chỉ cần nhập thông tin cơ bản. Người dùng sẽ tự bổ sung thông tin sau khi đăng nhập.</p>
+
+        <div class="form-grid">
+            <mat-form-field>
+                <mat-label>Username *</mat-label>
+                <input matInput [(ngModel)]="newUser.tenDangNhap" required>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Password *</mat-label>
+                <input matInput [(ngModel)]="newUser.matKhau" type="password" required>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Họ Tên *</mat-label>
+                <input matInput [(ngModel)]="newUser.hoTen" required>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Vai trò *</mat-label>
+                <mat-select [(ngModel)]="newUser.maVaiTro">
+                    <mat-option value="ADMIN">Admin</mat-option>
+                    <mat-option value="SINHVIEN">Sinh Viên</mat-option>
+                    <mat-option value="GIANGVIEN">Giảng Viên</mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input matInput [(ngModel)]="newUser.email" type="email">
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Điện thoại</mat-label>
+                <input matInput [(ngModel)]="newUser.dienThoai">
+            </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+            <button mat-raised-button color="warn" (click)="createUser()">Tạo tài khoản</button>
+            <button mat-button (click)="isCreating = false">Hủy</button>
+        </div>
+    </mat-card>
+
+    <div class="table-container mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="tenDangNhap">
+                <th mat-header-cell *matHeaderCellDef> Username </th>
+                <td mat-cell *matCellDef="let row"> {{row.tenDangNhap}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="hoTen">
+                <th mat-header-cell *matHeaderCellDef> Họ Tên </th>
+                <td mat-cell *matCellDef="let row"> {{getDisplayName(row)}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="maVaiTro">
+                <th mat-header-cell *matHeaderCellDef> Vai trò </th>
+                <td mat-cell *matCellDef="let row">
+                    <span class="role-badge" [class]="row.maVaiTro.toLowerCase()">{{row.maVaiTro}}</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="trangThai">
+                <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+                <td mat-cell *matCellDef="let row">
+                    <span [class.text-danger]="isLocked(row)" [class.text-success]="!isLocked(row)">
+                        {{ isLocked(row) ? 'Đã Khóa' : 'Hoạt động' }}
+                    </span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ngayTao">
+                <th mat-header-cell *matHeaderCellDef> Ngày tạo </th>
+                <td mat-cell *matCellDef="let row"> {{row.ngayTao | date:'dd/MM/yyyy'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Hành động </th>
+                <td mat-cell *matCellDef="let row">
+                    <button mat-icon-button [color]="isLocked(row) ? 'primary' : 'warn'" (click)="toggleStatus(row)"
+                        [title]="isLocked(row) ? 'Mở khóa' : 'Khóa tài khoản'">
+                        <mat-icon>{{ isLocked(row) ? 'lock_open' : 'lock' }}</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [length]="totalRecords" [pageSize]="20" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+    </div>
+</div>

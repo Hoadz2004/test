@@ -1,0 +1,81 @@
+<div class="admission-page">
+  <h2>Tuyển sinh</h2>
+  <p class="sub">Nộp hồ sơ trực tuyến.</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+    <mat-form-field>
+      <mat-label>Họ tên*</mat-label>
+      <input matInput formControlName="fullName" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Điện thoại</mat-label>
+      <input matInput formControlName="phone" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>CCCD/CMND</mat-label>
+      <input matInput formControlName="cccd" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Ngày sinh</mat-label>
+      <input matInput type="date" formControlName="ngaySinh" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Địa chỉ</mat-label>
+      <input matInput formControlName="diaChi" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Năm học</mat-label>
+      <mat-select formControlName="maNam" (selectionChange)="onYearSelected()">
+        <mat-option *ngFor="let y of years" [value]="y.ma">{{ y.ma }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Học kỳ</mat-label>
+      <mat-select #hkSel formControlName="maHK" (selectionChange)="onSemesterSelected()">
+        <mat-option *ngFor="let hk of semesters" [value]="hk.ma">{{ hk.ma }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Ngành</mat-label>
+      <mat-select #majorSel formControlName="maNganh" (selectionChange)="onMajorSelected()">
+        <mat-option *ngFor="let m of majors" [value]="m.ma">{{ m.ma }} - {{ m.ten }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <div class="full score-box" *ngIf="requirement">
+      <p class="sub">Điểm xét tuyển (theo ngành {{ requirement.maNganh }})</p>
+      <div class="score-grid">
+        <mat-form-field>
+          <mat-label>{{ requirement.mon1 || 'Môn 1' }}</mat-label>
+          <input matInput type="number" formControlName="diem1" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ requirement.mon2 || 'Môn 2' }}</mat-label>
+          <input matInput type="number" formControlName="diem2" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>{{ requirement.mon3 || 'Môn 3' }}</mat-label>
+          <input matInput type="number" formControlName="diem3" />
+        </mat-form-field>
+      </div>
+      <div class="note">Điểm chuẩn tham chiếu: {{ requirement.diemChuan || 'N/A' }}</div>
+    </div>
+    <div class="full note" *ngIf="!requirement && form.value.maNganh">Chưa cấu hình môn yêu cầu cho ngành này, bạn có thể bỏ trống điểm.</div>
+
+    <mat-form-field class="full">
+      <mat-label>Ghi chú</mat-label>
+      <textarea matInput rows="2" formControlName="ghiChu"></textarea>
+    </mat-form-field>
+    <div class="actions full">
+      <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Nộp hồ sơ</button>
+    </div>
+  </form>
+
+  <div *ngIf="submitted" class="result">
+    <p>Đã tạo hồ sơ. Mã tra cứu: <strong>{{ trackingCode }}</strong></p>
+  </div>
+</div>

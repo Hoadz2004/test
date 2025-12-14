@@ -1,0 +1,59 @@
+.container {
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 10px;
+
+    h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 500;
+    }
+}
+
+.grade-input {
+    width: 80px;
+    font-size: 14px;
+}
+
+table {
+    width: 100%;
+}
+
+.loading-shade {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.failed {
+    color: red;
+    font-weight: bold;
+}
+
+.badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 12px;
+
+    &.badge-fail {
+        background-color: #ffebee;
+        color: #c62828;
+    }
+
+    &.badge-good {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    &.badge-pass {
+        background-color: #e3f2fd;
+        color: #1565c0;
+    }
+}

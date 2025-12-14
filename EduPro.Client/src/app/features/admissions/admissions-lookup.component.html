@@ -1,0 +1,22 @@
+<div class="lookup-page">
+  <h2>Tra cứu hồ sơ</h2>
+  <form [formGroup]="form" (ngSubmit)="lookup()" class="form-row">
+    <mat-form-field appearance="outline">
+      <mat-label>Mã tra cứu</mat-label>
+      <input matInput formControlName="code" />
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">Tra cứu</button>
+  </form>
+
+  <div *ngIf="result" class="result">
+    <p><strong>Họ tên:</strong> {{ result.fullName }}</p>
+    <p><strong>Ngành:</strong> {{ result.maNganh || '-' }}</p>
+    <p><strong>Học kỳ:</strong> {{ result.maHK || '-' }}</p>
+    <p><strong>Trạng thái:</strong> {{ result.trangThai }}</p>
+    <p><strong>Ngày nộp:</strong> {{ result.ngayNop | date }}</p>
+    <p><strong>Cập nhật:</strong> {{ result.ngayCapNhat | date }}</p>
+    <p *ngIf="result.ghiChu"><strong>Ghi chú:</strong> {{ result.ghiChu }}</p>
+  </div>
+
+  <div *ngIf="notFound" class="notfound">Không tìm thấy hồ sơ.</div>
+</div>

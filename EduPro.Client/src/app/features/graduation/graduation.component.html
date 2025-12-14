@@ -1,0 +1,46 @@
+<div class="graduation-container">
+    <mat-card class="check-card">
+        <mat-card-header>
+            <mat-card-title>Xét Tốt Nghiệp</mat-card-title>
+            <mat-card-subtitle>Kiểm tra điều kiện tốt nghiệp của bạn</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content class="content-center">
+
+            <div *ngIf="!hasChecked && !loading" class="initial-state">
+                <p>Hệ thống sẽ kiểm tra số tín chỉ tích lũy và điểm trung bình tích lũy (GPA) theo quy định của ngành.
+                </p>
+                <button mat-raised-button color="accent" (click)="checkGraduation()" class="large-btn">
+                    <mat-icon>school</mat-icon> Kiểm Tra Ngay
+                </button>
+            </div>
+
+            <div *ngIf="loading" class="loading-state">
+                <mat-spinner diameter="50"></mat-spinner>
+                <p>Đang xử lý dữ liệu...</p>
+            </div>
+
+            <div *ngIf="hasChecked && !loading" class="result-state">
+                <!-- Result Found -->
+                <div *ngIf="result" [class.success]="result.ketQua === 'Đủ điều kiện'"
+                    [class.fail]="result.ketQua !== 'Đủ điều kiện'">
+                    <mat-icon class="status-icon">{{ result.ketQua === 'Đủ điều kiện' ? 'check_circle' : 'cancel'
+                        }}</mat-icon>
+                    <h2>{{ result.ketQua | uppercase }}</h2>
+                    <p class="reason">{{ result.lyDo }}</p>
+                    <p class="meta">Lần xét: {{ result.lanXet }} - Ngày xét: {{ result.ngayXet | date:'dd/MM/yyyy' }}
+                    </p>
+                </div>
+
+                <!-- No Result (Shouldn't happen if SP runs auto, but handling case) -->
+                <div *ngIf="!result" class="fail">
+                    <mat-icon class="status-icon">info</mat-icon>
+                    <h2>CHƯA CÓ KẾT QUẢ</h2>
+                    <p>Hệ thống chưa ghi nhận kết quả xét. Vui lòng thử lại sau.</p>
+                </div>
+
+                <button mat-stroked-button color="primary" (click)="checkGraduation()">Kiểm Tra Lại</button>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+</div>

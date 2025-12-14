@@ -1,0 +1,66 @@
+﻿<div class="page" *ngIf="admission">
+  <header>
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h2>Hồ sơ tuyển sinh</h2>
+      <p class="sub">Mã tra cứu: {{ admission.maTraCuu }}</p>
+    </div>
+  </header>
+
+  <mat-card>
+    <mat-card-content>
+      <div class="info-grid">
+        <div>
+          <p class="label">Họ tên</p>
+          <p>{{ admission.fullName }}</p>
+        </div>
+        <div>
+          <p class="label">Email</p>
+          <p>{{ admission.email || 'N/A' }}</p>
+        </div>
+        <div>
+          <p class="label">Ngành</p>
+          <p>{{ admission.maNganh }}</p>
+        </div>
+        <div>
+          <p class="label">Học kỳ</p>
+          <p>{{ admission.maHK }}</p>
+        </div>
+        <div>
+          <p class="label">Ngày nộp</p>
+          <p>{{ admission.ngayNop | date: 'short' }}</p>
+        </div>
+      </div>
+
+      <div class="scores" *ngIf="admission.diem1 !== undefined || admission.diem2 !== undefined || admission.diem3 !== undefined">
+        <h4>Điểm thí sinh</h4>
+        <div class="score-grid">
+          <div>
+            <p class="label">{{ admission.mon1 || 'Môn 1' }}</p>
+            <p>{{ admission.diem1 ?? '—' }}</p>
+          </div>
+          <div>
+            <p class="label">{{ admission.mon2 || 'Môn 2' }}</p>
+            <p>{{ admission.diem2 ?? '—' }}</p>
+          </div>
+          <div>
+            <p class="label">{{ admission.mon3 || 'Môn 3' }}</p>
+            <p>{{ admission.diem3 ?? '—' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-box">
+        <mat-form-field appearance="outline">
+          <mat-label>Trạng thái</mat-label>
+          <mat-select [(ngModel)]="admission.trangThai">
+            <mat-option *ngFor="let st of statuses" [value]="st">{{ st }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="actions">
+          <button mat-flat-button color="primary" (click)="updateStatus()">Lưu &amp; gửi email</button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

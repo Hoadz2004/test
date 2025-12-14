@@ -1,0 +1,106 @@
+.profile-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.profile-card {
+    border-radius: 12px;
+}
+
+.avatar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}
+
+.avatar mat-icon {
+    color: white;
+    font-size: 30px;
+    width: 30px;
+    height: 30px;
+}
+
+.info-section {
+    margin-bottom: 25px;
+}
+
+.info-section h3 {
+    color: #333;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 8px;
+    margin-bottom: 15px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.info-item.full-width {
+    grid-column: span 2;
+}
+
+.label {
+    color: #666;
+    font-size: 12px;
+    margin-bottom: 3px;
+}
+
+.value {
+    color: #333;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.status-active {
+    color: #388e3c;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.form-grid .full-width {
+    grid-column: span 2;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+mat-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.loading-card {
+    text-align: center;
+    padding: 50px;
+}
+
+@media (max-width: 600px) {
+
+    .info-grid,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-item.full-width,
+    .form-grid .full-width {
+        grid-column: span 1;
+    }
+}

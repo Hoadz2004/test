@@ -1,0 +1,55 @@
+<div class="login-shell">
+  <div class="intro">
+    <div>
+      <p class="eyebrow">Tuyển sinh & Tra cứu</p>
+      <h2>Chào mừng đến EduPro</h2>
+      <p class="sub">Nền tảng quản lý đào tạo, đăng ký học phần, công nợ & thanh toán.</p>
+    </div>
+    <div class="admissions">
+      <h3>Tuyển sinh</h3>
+      <p>Ứng viên mới có thể nộp hồ sơ trực tuyến.</p>
+      <button mat-stroked-button color="primary" routerLink="/admissions">Nộp hồ sơ</button>
+    </div>
+  </div>
+
+  <mat-card class="login-card">
+    <mat-card-header>
+      <mat-card-title>Đăng nhập</mat-card-title>
+      <mat-card-subtitle>Quản lý đào tạo</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tên đăng nhập / MSSV</mat-label>
+          <input matInput formControlName="username" placeholder="Nhập tên đăng nhập">
+          <mat-error *ngIf="f['username'].hasError('required')">
+            Vui lòng nhập tên đăng nhập
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Mật khẩu</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="'Hide password'" type="button">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="f['password'].hasError('required')">
+            Vui lòng nhập mật khẩu
+          </mat-error>
+        </mat-form-field>
+
+        <div class="error-message" *ngIf="error">
+          {{ error }}
+        </div>
+
+        <div class="actions">
+          <button mat-flat-button color="primary" class="full-width" type="submit" [disabled]="loading">
+            {{ loading ? 'Đang xử lý...' : 'Đăng Nhập' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

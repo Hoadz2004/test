@@ -1,0 +1,82 @@
+<div class="grade-appeal-container">
+    <mat-card class="form-card">
+        <mat-card-header>
+            <mat-card-title>Gửi Yêu Cầu Phúc Khảo</mat-card-title>
+            <mat-card-subtitle>Chỉ những môn đã có điểm (trong vòng 7 ngày) mới được phép phúc khảo.</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="appealForm" (ngSubmit)="onSubmit()">
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Chọn Môn Học</mat-label>
+                    <mat-select formControlName="maLHP" placeholder="Chọn môn cần phúc khảo">
+                        <mat-option *ngFor="let subject of eligibleSubjects" [value]="subject.maLHP">
+                            {{subject.tenHP}} (Điểm: {{subject.diemTK}}) - Công bố: {{subject.ngayCongBo |
+                            date:'dd/MM/yyyy'}}
+                        </mat-option>
+                        <mat-option *ngIf="eligibleSubjects.length === 0" disabled>
+                            Không có môn nào đủ điều kiện phúc khảo
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="appealForm.get('maLHP')?.hasError('required')">Vui lòng chọn môn học</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>Lý Do Phúc Khảo</mat-label>
+                    <textarea matInput formControlName="lyDo" rows="4"
+                        placeholder="Nhập lý do chi tiết (VD: Em làm bài tốt nhưng điểm thấp...)"></textarea>
+                    <mat-error *ngIf="appealForm.get('lyDo')?.hasError('required')">Bắt buộc nhập lý do</mat-error>
+                </mat-form-field>
+
+                <button mat-raised-button color="primary" type="submit"
+                    [disabled]="appealForm.invalid || eligibleSubjects.length === 0">
+                    <mat-icon>send</mat-icon> Gửi Yêu Cầu
+                </button>
+            </form>
+        </mat-card-content>
+    </mat-card>
+
+    <mat-card class="list-card">
+        <mat-card-header>
+            <mat-card-title>Lịch Sử Phúc Khảo</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <table mat-table [dataSource]="appeals" class="mat-elevation-z0">
+                <ng-container matColumnDef="tenHP">
+                    <th mat-header-cell *matHeaderCellDef> Môn Học </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tenHP}} <br /> <small>({{element.maLHP}})</small>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="lyDo">
+                    <th mat-header-cell *matHeaderCellDef> Lý Do </th>
+                    <td mat-cell *matCellDef="let element"> {{element.lyDo}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="trangThai">
+                    <th mat-header-cell *matHeaderCellDef> Trạng Thái </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span [class.pending]="element.trangThai === 'Chờ xử lý'"
+                            [class.done]="element.trangThai !== 'Chờ xử lý'">
+                            {{element.trangThai}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ngayGui">
+                    <th mat-header-cell *matHeaderCellDef> Ngày Gửi </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ngayGui | date:'dd/MM/yyyy HH:mm'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ghiChuXuLy">
+                    <th mat-header-cell *matHeaderCellDef> Phản Hồi </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ghiChuXuLy || '-'}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <p *ngIf="appeals.length === 0" class="no-data">Chưa có yêu cầu nào.</p>
+        </mat-card-content>
+    </mat-card>
+</div>

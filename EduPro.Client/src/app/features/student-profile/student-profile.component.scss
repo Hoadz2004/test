@@ -1,0 +1,128 @@
+.profile-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.profile-card {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+
+    mat-icon {
+        color: white;
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+
+    &.full-width {
+        grid-column: span 2;
+    }
+}
+
+.label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.value {
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+
+    &.not-updated {
+        color: #f57c00;
+        font-style: italic;
+    }
+}
+
+.divider {
+    grid-column: span 2;
+    margin: 10px 0;
+}
+
+// Edit Form Styles
+.edit-form {
+    padding: 20px 0;
+
+    h3 {
+        color: #333;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #667eea;
+        padding-bottom: 8px;
+    }
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    mat-form-field {
+        width: 100%;
+    }
+}
+
+mat-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px;
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+}
+
+.error-container {
+    text-align: center;
+    padding: 30px;
+    color: #d32f2f;
+}
+
+@media (max-width: 600px) {
+
+    .info-grid,
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .info-item.full-width,
+    .form-grid .full-width {
+        grid-column: span 1;
+    }
+
+    .divider {
+        grid-column: span 1;
+    }
+}

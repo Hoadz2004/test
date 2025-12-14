@@ -1,0 +1,104 @@
+<div class="master-data-container">
+    <h2 class="main-title">Dữ Liệu Danh Mục (Master Data)</h2>
+
+    <div class="data-grid">
+        <!-- Faculties -->
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Khoa (Faculties)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let item of faculties">{{ item.ma }} - {{ item.ten }}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Majors -->
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Ngành (Majors)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let item of majors">{{ item.ma }} - {{ item.ten }}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Semesters -->
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Học Kỳ (Semesters)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let item of semesters">{{ item.ten }}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Academic Years -->
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Năm Học</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let item of academicYears">{{ item.ten }}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Batches -->
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Khóa Tuyển Sinh</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let item of batches">{{ item.ma }} - {{ item.ten }}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Classrooms -->
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Phòng Học</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let item of classrooms">{{ item.ten }}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Shifts -->
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Ca Học</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let item of shifts">{{ item.ten }}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+
+        <!-- Subjects -->
+        <mat-card class="full-width">
+            <mat-card-header>
+                <mat-card-title>Học Phần (Top 10)</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-list>
+                    <mat-list-item *ngFor="let item of subjects | slice:0:10">{{ item.ma }} - {{ item.ten
+                        }}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <button mat-raised-button color="primary" routerLink="/dashboard" class="back-btn">Quay lại Dashboard</button>
+</div>

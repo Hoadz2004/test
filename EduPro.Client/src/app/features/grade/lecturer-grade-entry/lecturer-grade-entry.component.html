@@ -1,0 +1,102 @@
+<div class="container">
+    <div class="header" *ngIf="classInfo">
+        <button mat-icon-button (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>Nhập Điểm - {{classInfo.tenHP}} ({{classInfo.maLHP}})</h1>
+    </div>
+
+    <mat-card>
+        <mat-card-content>
+            <div *ngIf="isLoading" class="loading-shade">
+                <mat-spinner></mat-spinner>
+            </div>
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!isLoading">
+
+                <!-- Ma SV Column -->
+                <ng-container matColumnDef="maSV">
+                    <th mat-header-cell *matHeaderCellDef> Mã SV </th>
+                    <td mat-cell *matCellDef="let element"> {{element.maSV}} </td>
+                </ng-container>
+
+                <!-- Ho Ten Column -->
+                <ng-container matColumnDef="hoTen">
+                    <th mat-header-cell *matHeaderCellDef> Họ Tên </th>
+                    <td mat-cell *matCellDef="let element"> {{element.hoTen}} </td>
+                </ng-container>
+
+                <!-- Lop Column -->
+                <ng-container matColumnDef="lop">
+                    <th mat-header-cell *matHeaderCellDef> Lớp </th>
+                    <td mat-cell *matCellDef="let element"> {{element.lop}} </td>
+                </ng-container>
+
+                <!-- Diem CC Column -->
+                <ng-container matColumnDef="diemCC">
+                    <th mat-header-cell *matHeaderCellDef> Chuyên Cần </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-form-field appearance="outline" class="grade-input">
+                            <input matInput type="number" min="0" max="10" [(ngModel)]="element.diemCC"
+                                (change)="calculateTotal(element)">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+
+                <!-- Diem GK Column -->
+                <ng-container matColumnDef="diemGK">
+                    <th mat-header-cell *matHeaderCellDef> Giữa Kỳ </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-form-field appearance="outline" class="grade-input">
+                            <input matInput type="number" min="0" max="10" [(ngModel)]="element.diemGK"
+                                (change)="calculateTotal(element)">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+
+                <!-- Diem CK Column -->
+                <ng-container matColumnDef="diemCK">
+                    <th mat-header-cell *matHeaderCellDef> Cuối Kỳ </th>
+                    <td mat-cell *matCellDef="let element">
+                        <mat-form-field appearance="outline" class="grade-input">
+                            <input matInput type="number" min="0" max="10" [(ngModel)]="element.diemCK"
+                                (change)="calculateTotal(element)">
+                        </mat-form-field>
+                    </td>
+                </ng-container>
+
+                <!-- Diem TK Column (Preview) -->
+                <ng-container matColumnDef="diemTK">
+                    <th mat-header-cell *matHeaderCellDef> Tổng Kết </th>
+                    <td mat-cell *matCellDef="let element" [class.failed]="isFailed(element)">
+                        {{element.diemTK | number:'1.1-1'}}
+                    </td>
+                </ng-container>
+
+                <!-- Diem Chu Column -->
+                <ng-container matColumnDef="diemChu">
+                    <th mat-header-cell *matHeaderCellDef> Điểm Chữ </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="badge" [ngClass]="getBadgeClass(element)">{{element.diemChu}}</span>
+                    </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Lưu </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button color="primary" (click)="saveGrade(element)"
+                            [disabled]="element.isSaving">
+                            <mat-icon *ngIf="!element.isSaving">save</mat-icon>
+                            <mat-spinner *ngIf="element.isSaving" diameter="20"></mat-spinner>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+        </mat-card-content>
+    </mat-card>
+</div>

@@ -1,0 +1,116 @@
+<div class="page-container">
+    <h2>Nhật ký Hoạt động (Audit Logs)</h2>
+
+    <div class="filters">
+        <mat-form-field>
+            <mat-label>Tìm kiếm (User, Action)</mat-label>
+            <input matInput [(ngModel)]="keyword" (keyup.enter)="loadLogs()">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Từ ngày</mat-label>
+            <input matInput [matDatepicker]="picker1" [(ngModel)]="fromDate">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Đến ngày</mat-label>
+            <input matInput [matDatepicker]="picker2" [(ngModel)]="toDate">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Loại hành động</mat-label>
+            <mat-select [(ngModel)]="actionFilter" (selectionChange)="onActionFilterChange($event.value)">
+                <mat-option value="">Tất cả</mat-option>
+                <mat-option value="LOGIN">LOGIN</mat-option>
+                <mat-option value="LOGOUT">LOGOUT</mat-option>
+                <mat-option value="CREATE">CREATE</mat-option>
+                <mat-option value="UPDATE">UPDATE</mat-option>
+                <mat-option value="DELETE">DELETE</mat-option>
+                <mat-option value="LOCK_USER">LOCK_USER</mat-option>
+                <mat-option value="UNLOCK_USER">UNLOCK_USER</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Trạng thái</mat-label>
+            <mat-select [(ngModel)]="statusFilter" (selectionChange)="onStatusFilterChange($event.value)">
+                <mat-option value="">Tất cả</mat-option>
+                <mat-option value="SUCCESS">SUCCESS</mat-option>
+                <mat-option value="FAILED">FAILED</mat-option>
+                <mat-option value="ERROR">ERROR</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Module</mat-label>
+            <input matInput [(ngModel)]="moduleFilter" (keyup.enter)="onModuleFilterChange()" (blur)="onModuleFilterChange()">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="loadLogs()" [disabled]="isLoading">Xem Log</button>
+        <button mat-stroked-button color="primary" (click)="loadLogs()" [disabled]="isLoading">Làm mới</button>
+        <button mat-button color="accent" (click)="clearFilters()" [disabled]="isLoading">Xóa lọc</button>
+        <mat-checkbox [(ngModel)]="autoRefresh" (change)="toggleAutoRefresh($event.checked)">Tự làm mới 15s</mat-checkbox>
+    </div>
+
+    <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+    <div class="status error" *ngIf="isError && !isLoading">
+        <mat-icon color="warn">error</mat-icon>
+        {{ errorMessage }}
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!isError">
+
+        <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef> Thời gian </th>
+            <td mat-cell *matCellDef="let row"> {{row.timestamp | date:'dd/MM/yyyy HH:mm:ss'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="performedBy">
+            <th mat-header-cell *matHeaderCellDef> Người thực hiện </th>
+            <td mat-cell *matCellDef="let row"> {{row.performedBy}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Hành động </th>
+            <td mat-cell *matCellDef="let row">
+                <span class="badge" [ngClass]="row.action">{{row.action}}</span>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="module">
+            <th mat-header-cell *matHeaderCellDef> Module </th>
+            <td mat-cell *matCellDef="let row"> {{row.module || row.entityTable}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="details">
+            <th mat-header-cell *matHeaderCellDef> Chi tiết thay đổi </th>
+            <td mat-cell *matCellDef="let row"> {{getDetails(row)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+            <td mat-cell *matCellDef="let row">
+                <span class="badge status" [ngClass]="(row.status || 'SUCCESS')">{{row.status || 'SUCCESS'}}</span>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="ipAddress">
+            <th mat-header-cell *matHeaderCellDef> IP </th>
+            <td mat-cell *matCellDef="let row"> {{row.ipAddress}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [length]="totalRecords"
+                   [pageSize]="pageSize"
+                   [pageIndex]="pageIndex"
+                   [pageSizeOptions]="pageSizeOptions"
+                   (page)="onPageChange($event)">
+    </mat-paginator>
+</div>

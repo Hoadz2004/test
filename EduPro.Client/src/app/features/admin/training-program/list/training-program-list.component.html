@@ -1,0 +1,82 @@
+<div class="admin-container">
+    <div class="header-actions">
+        <h1>Quản lý Chương trình đào tạo</h1>
+        <button mat-raised-button color="primary" (click)="openCreateDialog()">
+            <mat-icon>add</mat-icon> Tạo mới
+        </button>
+    </div>
+
+    <div class="filter-section">
+        <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Tìm kiếm CTDT</mat-label>
+            <input matInput [(ngModel)]="keyword" (keyup.enter)="loadData()" placeholder="Nhập tên CTDT hoặc mã ngành">
+            <button mat-icon-button matSuffix (click)="loadData()">
+                <mat-icon>search</mat-icon>
+            </button>
+        </mat-form-field>
+    </div>
+
+    <div class="table-container mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" class="full-width-table">
+            <!-- Ma CTDT Column -->
+            <ng-container matColumnDef="maCTDT">
+                <th mat-header-cell *matHeaderCellDef> ID </th>
+                <td mat-cell *matCellDef="let element"> {{element.maCTDT}} </td>
+            </ng-container>
+
+            <!-- Ten CTDT Column -->
+            <ng-container matColumnDef="tenCTDT">
+                <th mat-header-cell *matHeaderCellDef> Tên CTDT </th>
+                <td mat-cell *matCellDef="let element">
+                    <a [routerLink]="['/admin/training-program', element.maCTDT]"
+                        class="link-text">{{element.tenCTDT}}</a>
+                </td>
+            </ng-container>
+
+            <!-- Nganh Column -->
+            <ng-container matColumnDef="tenNganh">
+                <th mat-header-cell *matHeaderCellDef> Ngành </th>
+                <td mat-cell *matCellDef="let element"> {{element.tenNganh}} </td>
+            </ng-container>
+
+            <!-- Khoa TS Column -->
+            <ng-container matColumnDef="tenKhoaTS">
+                <th mat-header-cell *matHeaderCellDef> Khóa </th>
+                <td mat-cell *matCellDef="let element"> {{element.tenKhoaTS}} </td>
+            </ng-container>
+
+            <!-- Nam Column -->
+            <ng-container matColumnDef="namBanHanh">
+                <th mat-header-cell *matHeaderCellDef> Năm </th>
+                <td mat-cell *matCellDef="let element"> {{element.namBanHanh}} </td>
+            </ng-container>
+
+            <!-- Trang Thai Column -->
+            <ng-container matColumnDef="trangThai">
+                <th mat-header-cell *matHeaderCellDef> Trạng thái </th>
+                <td mat-cell *matCellDef="let element">
+                    <span class="status-badge" [class.active]="element.trangThai === 1">
+                        {{element.trangThai === 1 ? 'Hoạt động' : 'Nháp'}}
+                    </span>
+                </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Thao tác </th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button color="primary" [routerLink]="['/admin/training-program', element.maCTDT]">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20, 50]"
+            (page)="onPageChange($event)">
+        </mat-paginator>
+    </div>
+</div>

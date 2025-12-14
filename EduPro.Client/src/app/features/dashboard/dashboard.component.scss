@@ -1,0 +1,103 @@
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #f6f8fb;
+}
+
+.hero {
+  background: linear-gradient(135deg, #1f2a6b, #22337c);
+  color: #fff;
+  border-radius: 14px;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  box-shadow: 0 10px 24px rgba(31, 42, 107, 0.14);
+}
+
+.hero-text h1 {
+  margin: 6px 0;
+  font-size: 26px;
+}
+.hero-text .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.85;
+  margin: 0;
+}
+.hero-text .sub {
+  margin: 0;
+  opacity: 0.9;
+}
+.role-chip {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+.hero-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #5c6bc0;
+  margin: 0;
+  font-weight: 600;
+}
+.sub {
+  color: #5f6470;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  background: #fff;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.04);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+.card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+.card-icon.primary { background: #3f51b5; }
+.card-icon.success { background: #2e7d32; }
+.card-icon.accent { background: #ef6c00; }
+.card-icon.neutral { background: #546e7a; }
+.card-icon.warning { background: #c62828; }
+.card-icon.info { background: #0288d1; }
+.card-body h3 { margin: 0; color: #0f172a; }
+.card-body p { margin: 0; color: #5f6470; }
+
+@media (max-width: 768px) {
+  .hero { flex-direction: column; align-items: flex-start; }
+  .section-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+}

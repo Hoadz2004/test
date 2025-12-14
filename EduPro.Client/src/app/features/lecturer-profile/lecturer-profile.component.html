@@ -1,0 +1,47 @@
+<div class="profile-container" *ngIf="profile">
+    <mat-card class="profile-card">
+        <mat-card-header>
+            <div mat-card-avatar class="profile-avatar-icon">
+                <mat-icon>school</mat-icon>
+            </div>
+            <mat-card-title>{{ profile.hoTen }}</mat-card-title>
+            <mat-card-subtitle>{{ profile.maGV }} (Giảng Viên)</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Mã Giảng Viên:</span>
+                    <span class="value">{{ profile.maGV }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Khoa:</span>
+                    <span class="value">{{ profile.tenKhoa }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Email:</span>
+                    <span class="value">{{ profile.email }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Số Điện Thoại:</span>
+                    <span class="value">{{ profile.dienThoai }}</span>
+                </div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+            <button mat-button color="primary" routerLink="/dashboard">
+                <mat-icon>arrow_back</mat-icon> Quay lại
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+<div class="loading-container" *ngIf="!profile && !error">
+    <mat-spinner diameter="40"></mat-spinner>
+</div>
+
+<div class="error-container" *ngIf="error">
+    <p>{{ error }}</p>
+    <button mat-button color="warn" routerLink="/dashboard">Quay lại Dashboard</button>
+</div>

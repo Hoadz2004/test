@@ -1,0 +1,39 @@
+.page-container {
+    padding: 20px;
+}
+
+.filters {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.badge {
+    background: #e0e0e0;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.status {
+    margin: 0 0 8px 0;
+    color: #555;
+    font-style: italic;
+}
+
+/* Màu cho hành động */
+.badge.LOGIN { background: #e3f2fd; color: #1565c0; }
+.badge.LOGOUT { background: #ede7f6; color: #5e35b1; }
+.badge.CREATE, .badge.CREATE_USER { background: #e8f5e9; color: #2e7d32; }
+.badge.UPDATE { background: #fff8e1; color: #f57f17; }
+.badge.DELETE { background: #ffebee; color: #c62828; }
+.badge.LOCK_USER { background: #fbe9e7; color: #d84315; }
+.badge.UNLOCK_USER { background: #e8eaf6; color: #283593; }
+
+/* Màu cho trạng thái */
+.badge.status.SUCCESS { background: #e8f5e9; color: #2e7d32; }
+.badge.status.FAILED, .badge.status.ERROR { background: #ffebee; color: #c62828; }

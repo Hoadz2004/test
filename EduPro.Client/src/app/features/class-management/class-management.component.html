@@ -1,0 +1,292 @@
+<div class="class-mgmt-container">
+    <h2 class="main-title">Quản Lý Lớp Học Phần (Admin)</h2>
+
+    <mat-tab-group [(selectedIndex)]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
+        <mat-tab [label]="MESSAGES.TAB_LIST">
+            <div class="filter-section">
+                <mat-form-field appearance="outline">
+                    <mat-label>{{ MESSAGES.ACADEMIC_YEAR }}</mat-label>
+                    <mat-select [(ngModel)]="selectedYearId" (selectionChange)="onFilterChanged()">
+                        <mat-option *ngFor="let y of years" [value]="y.ma">{{ y.ten }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>{{ MESSAGES.SEMESTER }}</mat-label>
+                    <mat-select [(ngModel)]="selectedSemesterId" (selectionChange)="onFilterChanged()">
+                        <mat-option *ngFor="let s of semesters" [value]="s.ma">{{ s.ten }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="keyword">
+                    <mat-label>Tìm kiếm (Mã lớp/Môn/Giảng viên)</mat-label>
+                    <input matInput [(ngModel)]="filterKeyword" placeholder="Nhập từ khóa...">
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="status-filter">
+                    <mat-label>Trạng thái</mat-label>
+                    <mat-select [(ngModel)]="filterStatusCode">
+                        <mat-option value="">Tất cả</mat-option>
+                        <mat-option *ngFor="let s of STATUS_OPTIONS" [value]="s.code">{{ s.label }}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-icon-button (click)="onFilterChanged()" [disabled]="isLoadingList" [matTooltip]="MESSAGES.TOOLTIP_REFRESH">
+                    <mat-icon *ngIf="!isLoadingList">refresh</mat-icon>
+                    <mat-icon *ngIf="isLoadingList" class="spin">autorenew</mat-icon>
+                </button>
+            </div>
+
+            <table mat-table [dataSource]="filteredClasses" class="mat-elevation-z8" *ngIf="!isLoadingList">
+                <ng-container matColumnDef="maLHP">
+                    <th mat-header-cell *matHeaderCellDef> {{ MESSAGES.TABLE_CLASS_CODE }} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.maLHP}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="tenHP">
+                    <th mat-header-cell *matHeaderCellDef> {{ MESSAGES.TABLE_SUBJECT_NAME }} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tenHP}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="giangVien">
+                    <th mat-header-cell *matHeaderCellDef> {{ MESSAGES.TABLE_LECTURER }} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tenGV}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="lichHoc">
+                    <th mat-header-cell *matHeaderCellDef> {{ MESSAGES.TABLE_SCHEDULE }} </th>
+                    <td mat-cell *matCellDef="let element"> Thứ {{element.thuTrongTuan}}, {{element.tenCa}}, {{element.tenPhong}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="siSo">
+                    <th mat-header-cell *matHeaderCellDef> {{ MESSAGES.TABLE_CAPACITY }} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.siSoHienTai}} / {{element.siSoToiDa}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ngayBatDau">
+                    <th mat-header-cell *matHeaderCellDef> {{ MESSAGES.TABLE_START_DATE }} </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ngayBatDau | date: DATE_FORMAT}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="trangThaiLop">
+                    <th mat-header-cell *matHeaderCellDef> {{ MESSAGES.TABLE_STATUS }} </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span [ngClass]="{
+                            'status-new': getStatusCode(element) === 'PLANNED',
+                            'status-active': getStatusCode(element) === 'ONGOING',
+                            'status-closed': getStatusCode(element) === 'CLOSED',
+                            'status-cancel': getStatusCode(element) === 'CANCELED'
+                        }">
+                            {{getStatusLabel(element)}}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef> {{ MESSAGES.TABLE_ACTION }} </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-icon-button color="primary" (click)="editClass(element)" [matTooltip]="MESSAGES.TOOLTIP_EDIT">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="deleteClass(element.maLHP)" [matTooltip]="MESSAGES.TOOLTIP_DELETE">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator
+                [length]="totalRecords"
+                [pageIndex]="pageIndex"
+                [pageSize]="pageSize"
+                [pageSizeOptions]="pageSizeOptions"
+                [showFirstLastButtons]="true"
+                (page)="onPageChange($event)">
+            </mat-paginator>
+            <div class="loading-placeholder" *ngIf="isLoadingList">
+                <mat-spinner diameter="40"></mat-spinner>
+                <span>Đang tải danh sách lớp...</span>
+            </div>
+        </mat-tab>
+
+        <mat-tab [label]="isEditMode ? MESSAGES.TAB_EDIT : MESSAGES.TAB_CREATE">
+            <div class="create-form-container">
+                <mat-card>
+                    <mat-card-content>
+                        <form class="form-grid" [formGroup]="classForm">
+                            <h3 class="group-title full-width">{{ MESSAGES.SECTION_TIME }}</h3>
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.ACADEMIC_YEAR }}</mat-label>
+                                <mat-select formControlName="maNam" (selectionChange)="onYearSelected()">
+                                    <mat-option *ngFor="let y of years" [value]="y.ma">{{ y.ten }}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="fv['maNam'].touched && fv['maNam'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.SEMESTER }}</mat-label>
+                                <mat-select #semesterSel formControlName="maHK" (selectionChange)="onSemesterSelected()">
+                                    <mat-option *ngFor="let s of semesters" [value]="s.ma">{{ s.ten }}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="fv['maHK'].touched && fv['maHK'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.START_DATE }}</mat-label>
+                                <input #startInput matInput [matDatepicker]="startPicker" formControlName="ngayBatDau" (focus)="startPicker.open()" (dateChange)="onStartDateSelected()">
+                                <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #startPicker></mat-datepicker>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="span-2">
+                                <mat-label>{{ MESSAGES.END_DATE }}</mat-label>
+                                <input #endInput matInput [matDatepicker]="endPicker" formControlName="ngayKetThuc" (focus)="endPicker.open()" (dateChange)="onEndDateSelected()">
+                                <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #endPicker></mat-datepicker>
+                            </mat-form-field>
+                            <div *ngIf="dateError" class="date-error full-width">
+                                <mat-icon color="warn" style="vertical-align: middle;">warning</mat-icon>
+                                <span>{{ dateError }}</span>
+                            </div>
+
+                            <h3 class="group-title full-width">{{ MESSAGES.SECTION_SUBJECT }}</h3>
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.FACULTY }}</mat-label>
+                                <mat-select #facultySel [(ngModel)]="selectedFacultyId" [ngModelOptions]="{standalone: true}" (selectionChange)="onFacultyChange()" (closed)="onFacultyClosed()">
+                                    <mat-option *ngFor="let f of faculties" [value]="f.ma">{{ f.ten }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.MAJOR }}</mat-label>
+                                <mat-select #majorSel [(ngModel)]="selectedMajorId" [ngModelOptions]="{standalone: true}" (selectionChange)="onMajorChange()"
+                                    [disabled]="!selectedFacultyId">
+                                    <mat-option *ngFor="let m of filteredMajors" [value]="m.ma">{{ m.ten }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.SUBJECT }}</mat-label>
+                                <mat-select #subjectSel formControlName="maHP" [disabled]="!selectedMajorId && !isEditMode" (selectionChange)="onSubjectSelected()">
+                                    <mat-option *ngFor="let s of filteredSubjects" [value]="s.ma">{{ s.ma }} - {{ s.ten }}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="fv['maHP'].touched && fv['maHP'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+
+                            <h3 class="group-title full-width">{{ MESSAGES.SECTION_RESOURCES }}</h3>
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.LECTURER }}</mat-label>
+                                <mat-select #lecturerSel formControlName="maGV" [disabled]="!selectedFacultyId"
+                                    (selectionChange)="checkConflict(); onLecturerSelected()">
+                                    <mat-option *ngFor="let gv of filteredLecturers" [value]="gv.ma">{{ gv.ten }}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="fv['maGV'].touched && fv['maGV'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.WEEKDAY }}</mat-label>
+                                <mat-select #weekdaySel formControlName="thuTrongTuan" (selectionChange)="checkConflict(); onWeekdaySelected()">
+                                    <mat-option [value]="2">Thứ 2</mat-option>
+                                    <mat-option [value]="3">Thứ 3</mat-option>
+                                    <mat-option [value]="4">Thứ 4</mat-option>
+                                    <mat-option [value]="5">Thứ 5</mat-option>
+                                    <mat-option [value]="6">Thứ 6</mat-option>
+                                    <mat-option [value]="7">Thứ 7</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="fv['thuTrongTuan'].touched && fv['thuTrongTuan'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.SHIFT }}</mat-label>
+                                <mat-select #shiftSel formControlName="maCa" (selectionChange)="checkConflict(); onShiftSelected()">
+                                    <mat-option *ngFor="let c of shifts" [value]="c.ma">{{ c.ten }}</mat-option>
+                                </mat-select>
+                                <mat-error *ngIf="fv['maCa'].touched && fv['maCa'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="span-2">
+                                <mat-label>{{ MESSAGES.CLASSROOM }}</mat-label>
+                                <mat-select #roomSel formControlName="maPhong" (selectionChange)="checkConflict(); onRoomSelected()" [disabled]="!classForm.value.thuTrongTuan || !classForm.value.maCa || isCheckingRooms">
+                                    <mat-option *ngFor="let p of classrooms" [value]="p.ma" [disabled]="busyRooms[p.ma]">
+                                        {{ p.ten }}
+                                        <span *ngIf="busyRooms[p.ma]" style="color:red;"> - Bận ({{ busyRooms[p.ma] }})</span>
+                                    </mat-option>
+                                </mat-select>
+                                <mat-hint *ngIf="!classForm.value.thuTrongTuan || !classForm.value.maCa">Chọn Thứ và Ca trước để xem phòng rảnh</mat-hint>
+                                <mat-hint *ngIf="isCheckingRooms">Đang kiểm tra phòng trống...</mat-hint>
+                                <mat-error *ngIf="fv['maPhong'].touched && fv['maPhong'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+
+                            <div *ngIf="conflictMessage" class="conflict-alert"
+                                style="color: red; font-weight: bold; margin-bottom: 10px; grid-column: 1 / -1;">
+                                <mat-icon style="vertical-align: middle; margin-right: 5px;">warning</mat-icon>
+                                {{ conflictMessage }}
+                            </div>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.CAPACITY }}</mat-label>
+                                <input #capacityInput matInput type="number" min="1" formControlName="siSoToiDa">
+                                <mat-error *ngIf="fv['siSoToiDa'].touched && fv['siSoToiDa'].hasError('min')">Tối thiểu 1</mat-error>
+                                <mat-error *ngIf="fv['siSoToiDa'].touched && fv['siSoToiDa'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.SESSIONS }}</mat-label>
+                                <input matInput type="number" min="1" formControlName="soBuoiHoc">
+                                <mat-error *ngIf="fv['soBuoiHoc'].touched && fv['soBuoiHoc'].hasError('min')">Tối thiểu 1</mat-error>
+                                <mat-error *ngIf="fv['soBuoiHoc'].touched && fv['soBuoiHoc'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.SESSIONS_PER_WEEK }}</mat-label>
+                                <input matInput type="number" min="1" max="7" formControlName="soBuoiTrongTuan">
+                                <mat-error *ngIf="fv['soBuoiTrongTuan'].touched && fv['soBuoiTrongTuan'].hasError('min')">Tối thiểu 1</mat-error>
+                                <mat-error *ngIf="fv['soBuoiTrongTuan'].touched && fv['soBuoiTrongTuan'].hasError('max')">Tối đa 7</mat-error>
+                                <mat-error *ngIf="fv['soBuoiTrongTuan'].touched && fv['soBuoiTrongTuan'].hasError('required')">Bắt buộc</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>{{ MESSAGES.CLASS_STATUS }}</mat-label>
+                                <mat-select formControlName="trangThaiCode">
+                                    <mat-option *ngFor="let status of STATUS_OPTIONS" [value]="status.code">
+                                        {{ status.label }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="span-2">
+                                <mat-label>{{ MESSAGES.CLASS_CODE }}</mat-label>
+                                <input matInput formControlName="maLHP" placeholder="VD: 20241-IT1110-01" [readonly]="isEditMode">
+                                <mat-error *ngIf="fv['maLHP'].touched && fv['maLHP'].hasError('required')">Bắt buộc</mat-error>
+                                <mat-error *ngIf="fv['maLHP'].touched && fv['maLHP'].hasError('pattern')">Chỉ chữ, số, dấu gạch</mat-error>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>{{ MESSAGES.NOTES }}</mat-label>
+                                <textarea matInput formControlName="ghiChu" rows="3"></textarea>
+                            </mat-form-field>
+
+                            <div class="fee-info" *ngIf="feeInfo">
+                                <div>Đơn giá/TC: <strong>{{ feeInfo.donGiaTinChi | number:'1.0-0' }} đ</strong></div>
+                                <div>Phụ phí TH: <strong>{{ feeInfo.phuPhiThucHanh | number:'1.0-0' }} đ</strong></div>
+                                <div>Giảm trừ: <strong>{{ feeInfo.giamTruPercent }}%</strong></div>
+                                <div>Hiệu lực: <strong>{{ feeInfo.hieuLucTu | date:'shortDate' }}</strong> - <strong>{{ feeInfo.hieuLucDen ? (feeInfo.hieuLucDen | date:'shortDate') : '—' }}</strong></div>
+                                <div>Hạn thanh toán: <strong>{{ feeInfo.ngayHetHan ? (feeInfo.ngayHetHan | date:'shortDate') : '—' }}</strong></div>
+                            </div>
+                        </form>
+
+                        <div class="actions">
+                            <button mat-raised-button color="primary" (click)="isEditMode ? updateClass() : createClass()"
+                                [disabled]="!isValidClass() || isSaving || isLoadingList">
+                                {{ isEditMode ? MESSAGES.BUTTON_UPDATE : MESSAGES.BUTTON_CREATE }}
+                            </button>
+                            <button mat-raised-button (click)="cancelEdit()" *ngIf="isEditMode" style="margin-left: 10px;" [disabled]="isSaving">
+                                {{ MESSAGES.BUTTON_CANCEL }}
+                            </button>
+                            <mat-progress-bar *ngIf="isSaving" mode="indeterminate"></mat-progress-bar>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

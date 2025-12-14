@@ -1,0 +1,84 @@
+﻿<div class="page">
+  <header>
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h2>Tuyển sinh</h2>
+      <p class="sub">Danh sách hồ sơ, lọc và cập nhật trạng thái.</p>
+    </div>
+  </header>
+
+  <div class="filters" [formGroup]="filterForm">
+    <mat-form-field>
+      <mat-label>Học kỳ</mat-label>
+      <mat-select formControlName="maHK" (selectionChange)="load()">
+        <mat-option value="">Tất cả</mat-option>
+        <mat-option *ngFor="let hk of semesters" [value]="hk.ma">{{ hk.ma }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Ngành</mat-label>
+      <mat-select formControlName="maNganh" (selectionChange)="load()">
+        <mat-option value="">Tất cả</mat-option>
+        <mat-option *ngFor="let m of majors" [value]="m.ma">{{ m.ma }} - {{ m.ten }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Trạng thái</mat-label>
+      <mat-select formControlName="trangThai" (selectionChange)="load()">
+        <mat-option value="">Tất cả</mat-option>
+        <mat-option *ngFor="let st of statuses" [value]="st">{{ st }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-stroked-button (click)="load()">Lọc</button>
+  </div>
+
+  <table mat-table [dataSource]="admissions" class="full-width-table">
+    <ng-container matColumnDef="maTraCuu">
+      <th mat-header-cell *matHeaderCellDef>Mã tra cứu</th>
+      <td mat-cell *matCellDef="let a">{{ a.maTraCuu }}</td>
+    </ng-container>
+    <ng-container matColumnDef="fullName">
+      <th mat-header-cell *matHeaderCellDef>Họ tên</th>
+      <td mat-cell *matCellDef="let a">{{ a.fullName }}</td>
+    </ng-container>
+    <ng-container matColumnDef="maNganh">
+      <th mat-header-cell *matHeaderCellDef>Ngành</th>
+      <td mat-cell *matCellDef="let a">{{ a.maNganh }}</td>
+    </ng-container>
+    <ng-container matColumnDef="maHK">
+      <th mat-header-cell *matHeaderCellDef>Học kỳ</th>
+      <td mat-cell *matCellDef="let a">{{ a.maHK }}</td>
+    </ng-container>
+    <ng-container matColumnDef="trangThai">
+      <th mat-header-cell *matHeaderCellDef>Trạng thái</th>
+      <td mat-cell *matCellDef="let a">
+        <mat-form-field appearance="outline" class="status-field">
+          <mat-select [(ngModel)]="a.trangThai">
+            <mat-option *ngFor="let st of statuses" [value]="st">{{ st }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="ngayNop">
+      <th mat-header-cell *matHeaderCellDef>Ngày nộp</th>
+      <td mat-cell *matCellDef="let a">{{ a.ngayNop | date:'short' }}</td>
+    </ng-container>
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Trạng thái</th>
+      <td mat-cell *matCellDef="let a" class="actions-cell">
+        <button mat-button color="primary" (click)="updateStatus(a)">Lưu</button>
+        <button mat-stroked-button color="accent" (click)="viewDetail(a)">Xem hồ sơ</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [length]="totalRecords"
+                 [pageSize]="pageSize"
+                 [pageIndex]="pageIndex"
+                 [pageSizeOptions]="pageSizeOptions"
+                 (page)="pageChange($event)">
+  </mat-paginator>
+</div>

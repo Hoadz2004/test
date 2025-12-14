@@ -1,0 +1,108 @@
+<div class="page">
+  <header>
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h2>Đơn giá học phí</h2>
+      <p class="sub">Cấu hình đơn giá/TC, phụ phí, giảm trừ, hiệu lực và hạn nộp.</p>
+    </div>
+  </header>
+
+  <mat-card>
+    <mat-card-title>Đơn giá</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="form" class="form-grid">
+        <mat-form-field>
+          <mat-label>Ngành*</mat-label>
+          <mat-select formControlName="maNganh">
+            <mat-option *ngFor="let m of majors" [value]="m.ma">{{ m.ma }} - {{ m.ten }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Học kỳ*</mat-label>
+          <mat-select formControlName="maHK">
+            <mat-option *ngFor="let hk of semesters" [value]="hk.ma">{{ hk.ma }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Đơn giá/TC*</mat-label>
+          <input matInput type="number" formControlName="donGiaTinChi" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Phụ phí TH*</mat-label>
+          <input matInput type="number" formControlName="phuPhiThucHanh" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Giảm trừ (%)</mat-label>
+          <input matInput type="number" formControlName="giamTruPercent" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Hiệu lực từ</mat-label>
+          <input matInput type="date" formControlName="hieuLucTu" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Hiệu lực đến</mat-label>
+          <input matInput type="date" formControlName="hieuLucDen" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Hạn thanh toán</mat-label>
+          <input matInput type="date" formControlName="ngayHetHan" />
+        </mat-form-field>
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">Lưu đơn giá</button>
+        </div>
+      </form>
+
+      <table mat-table [dataSource]="dataSource" class="full-width-table">
+        <ng-container matColumnDef="maNganh">
+          <th mat-header-cell *matHeaderCellDef>Ngành</th>
+          <td mat-cell *matCellDef="let f">{{ f.maNganh }}</td>
+        </ng-container>
+        <ng-container matColumnDef="maHK">
+          <th mat-header-cell *matHeaderCellDef>Học kỳ</th>
+          <td mat-cell *matCellDef="let f">{{ f.maHK }}</td>
+        </ng-container>
+        <ng-container matColumnDef="donGiaTinChi">
+          <th mat-header-cell *matHeaderCellDef>Đơn giá/TC</th>
+          <td mat-cell *matCellDef="let f">{{ f.donGiaTinChi | number:'1.0-0' }} đ</td>
+        </ng-container>
+        <ng-container matColumnDef="phuPhiThucHanh">
+          <th mat-header-cell *matHeaderCellDef>Phụ phí</th>
+          <td mat-cell *matCellDef="let f">{{ f.phuPhiThucHanh | number:'1.0-0' }} đ</td>
+        </ng-container>
+        <ng-container matColumnDef="giamTruPercent">
+          <th mat-header-cell *matHeaderCellDef>Giảm</th>
+          <td mat-cell *matCellDef="let f">{{ f.giamTruPercent }}%</td>
+        </ng-container>
+        <ng-container matColumnDef="hieuLucTu">
+          <th mat-header-cell *matHeaderCellDef>Hiệu lực từ</th>
+          <td mat-cell *matCellDef="let f">{{ f.hieuLucTu | date:'shortDate' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="hieuLucDen">
+          <th mat-header-cell *matHeaderCellDef>Hiệu lực đến</th>
+          <td mat-cell *matCellDef="let f">{{ f.hieuLucDen ? (f.hieuLucDen | date:'shortDate') : '-' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="ngayHetHan">
+          <th mat-header-cell *matHeaderCellDef>Hạn thanh toán</th>
+          <td mat-cell *matCellDef="let f">{{ f.ngayHetHan ? (f.ngayHetHan | date:'shortDate') : '-' }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Thao tác</th>
+          <td mat-cell *matCellDef="let f">
+            <button mat-button color="primary" (click)="edit(f)">Sửa</button>
+            <button mat-button color="warn" (click)="delete(f.id)">Xóa</button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator
+        [length]="totalRecords"
+        [pageIndex]="pageIndex"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

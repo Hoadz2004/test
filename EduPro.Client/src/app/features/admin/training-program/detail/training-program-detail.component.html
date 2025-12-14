@@ -1,0 +1,81 @@
+<div class="detail-container" *ngIf="ctdt">
+    <div class="header">
+        <button mat-icon-button routerLink="/admin/training-program">
+            <mat-icon>arrow_back</mat-icon>
+        </button>
+        <h1>{{ ctdt.tenCTDT }}</h1>
+        <span class="status-badge" [class.active]="ctdt.trangThai === 1">
+            {{ ctdt.trangThai === 1 ? 'Hoạt động' : 'Nháp' }}
+        </span>
+    </div>
+
+    <div class="info-section mat-elevation-z1">
+        <div class="info-row">
+            <span><strong>Ngành:</strong> {{ ctdt.tenNganh }}</span>
+            <span><strong>Khóa tuyển sinh:</strong> {{ ctdt.tenKhoaTS }}</span>
+            <span><strong>Năm ban hành:</strong> {{ ctdt.namBanHanh }}</span>
+        </div>
+    </div>
+
+    <div class="subjects-section">
+        <div class="section-header">
+            <h2>Danh sách học phần</h2>
+            <button mat-flat-button color="primary" (click)="openAddSubject()">
+                <mat-icon>add</mat-icon> Thêm học phần
+            </button>
+        </div>
+
+        <table mat-table [dataSource]="subjects" class="mat-elevation-z2 full-width-table">
+            <ng-container matColumnDef="maHP">
+                <th mat-header-cell *matHeaderCellDef> Mã HP </th>
+                <td mat-cell *matCellDef="let element"> {{element.maHP}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tenHP">
+                <th mat-header-cell *matHeaderCellDef> Tên HP </th>
+                <td mat-cell *matCellDef="let element"> {{element.tenHP}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="soTinChi">
+                <th mat-header-cell *matHeaderCellDef> STC </th>
+                <td mat-cell *matCellDef="let element"> {{element.soTinChi}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="hocKyDuKien">
+                <th mat-header-cell *matHeaderCellDef> HK </th>
+                <td mat-cell *matCellDef="let element"> {{element.hocKyDuKien}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="loai">
+                <th mat-header-cell *matHeaderCellDef> Loại </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.batBuoc ? 'Bắt buộc' : 'Tự chọn'}}
+                    <span *ngIf="element.nhomTuChon">({{element.nhomTuChon}})</span>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="tienQuyet">
+                <th mat-header-cell *matHeaderCellDef> Tiên quyết </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.monTienQuyet}}
+                    <button mat-icon-button color="accent" (click)="openPrerequisite(element)"
+                        matTooltip="Thêm tiên quyết">
+                        <mat-icon>link</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Thao tác </th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button color="warn" (click)="removeSubject(element.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</div>

@@ -1,0 +1,106 @@
+<div class="payment-container">
+  <h2>Công nợ & Thanh toán</h2>
+
+  <div class="form-row">
+    <label for="filterhk">Lọc theo học kỳ</label>
+    <input id="filterhk" type="text" [(ngModel)]="filterMaHK" placeholder="Ví dụ: HK1-2025" />
+    <button mat-raised-button color="primary" (click)="loadDebts()" [disabled]="loading">Lọc</button>
+  </div>
+
+  <table *ngIf="debts.length" class="debt-table">
+    <thead>
+      <tr>
+        <th>Học kỳ</th>
+        <th>Học phí gốc</th>
+        <th>Đã thanh toán</th>
+        <th>Còn nợ</th>
+        <th>Cập nhật</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of debts">
+        <td>{{ item.maHK }}</td>
+        <td>{{ item.soTienGoc | number:'1.0-0' }} đ</td>
+        <td>{{ item.daThanhToan | number:'1.0-0' }} đ</td>
+        <td [class.negative]="item.soTienNo > 0">{{ item.soTienNo | number:'1.0-0' }} đ</td>
+        <td>{{ item.ngayCapNhat | date:'short' }}</td>
+        <td>
+          <button mat-stroked-button color="primary" (click)="maHK = item.maHK; loadDebt();">
+            Xem chi tiết
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card" *ngIf="debt">
+    <div class="row">
+      <span>Mã SV:</span><strong>{{ debt.maSV }}</strong>
+    </div>
+    <div class="row">
+      <span>Học kỳ:</span><strong>{{ debt.maHK }}</strong>
+    </div>
+    <div class="row">
+      <span>Học phí gốc:</span><strong>{{ debt.soTienGoc | number:'1.0-0' }} đ</strong>
+    </div>
+    <div class="row">
+      <span>Đã thanh toán:</span><strong>{{ debt.daThanhToan | number:'1.0-0' }} đ</strong>
+    </div>
+    <div class="row highlight">
+      <span>Số tiền nợ:</span><strong>{{ debt.soTienNo | number:'1.0-0' }} đ</strong>
+    </div>
+    <div class="row">
+      <span>Cập nhật:</span><strong>{{ debt.ngayCapNhat | date:'short' }}</strong>
+    </div>
+    <div class="actions">
+      <button mat-flat-button color="primary" (click)="initPayment()" [disabled]="loading || debt.soTienNo <= 0">
+        Thanh toán VNPay
+      </button>
+    </div>
+  </div>
+
+  <div class="info" *ngIf="paymentInfo">
+    <div>Đã tạo giao dịch #{{ paymentInfo.paymentId }} ({{ paymentInfo.amount | number:'1.0-0' }} đ)</div>
+    <div *ngIf="paymentInfo.paymentUrl">
+      URL thanh toán VNPay: <a [href]="paymentInfo.paymentUrl" target="_blank">{{ paymentInfo.paymentUrl }}</a>
+    </div>
+  </div>
+
+  <div class="detail" *ngIf="debtDetails.length">
+    <h3>Chi tiết môn nợ</h3>
+    <table class="debt-table">
+      <thead>
+        <tr>
+          <th>Mã LHP</th>
+          <th>Tên học phần</th>
+          <th>TC</th>
+          <th>Đơn giá/TC</th>
+          <th>Phụ phí</th>
+          <th>Giảm trừ</th>
+          <th>Số tiền</th>
+          <th>Đăng ký</th>
+          <th>Hạn thanh toán</th>
+          <th>Trạng thái</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of debtDetails">
+          <td>{{ d.maLHP }}</td>
+          <td>{{ d.tenHP }}</td>
+          <td>{{ d.soTinChi }}</td>
+          <td>{{ d.donGiaTinChi | number:'1.0-0' }} đ</td>
+          <td>{{ d.phuPhiThucHanh | number:'1.0-0' }} đ</td>
+          <td>{{ d.giamTruPercent }}%</td>
+          <td>{{ d.soTien | number:'1.0-0' }} đ</td>
+          <td>{{ d.ngayDangKy ? (d.ngayDangKy | date:'short') : '-' }}</td>
+          <td>{{ d.hanThanhToan ? (d.hanThanhToan | date:'shortDate') : '-' }}</td>
+          <td>{{ d.trangThaiDangKy }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="alert">
+      Lưu ý: quá hạn thanh toán sẽ có thể bị cảnh cáo/đình chỉ hoặc phải học lại tùy quy định.
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<div class="page">
+  <header>
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h2>Quản lý học phần</h2>
+      <p class="sub">Thêm, sửa, xóa học phần (mã, tín chỉ, loại, tiết LT/TH).</p>
+    </div>
+  </header>
+
+  <mat-card>
+    <mat-card-title>Học phần</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="form" class="form-grid">
+        <mat-form-field>
+          <mat-label>Mã HP*</mat-label>
+          <input matInput formControlName="maHP" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Tên học phần*</mat-label>
+          <input matInput formControlName="tenHP" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Số tín chỉ</mat-label>
+          <input matInput type="number" formControlName="soTinChi" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Loại</mat-label>
+          <mat-select formControlName="loaiHocPhan">
+            <mat-option value="Lý thuyết">Lý thuyết</mat-option>
+            <mat-option value="Thực hành">Thực hành</mat-option>
+            <mat-option value="Tích hợp">Tích hợp</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Số tiết LT</mat-label>
+          <input matInput type="number" formControlName="soTietLT" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Số tiết TH</mat-label>
+          <input matInput type="number" formControlName="soTietTH" />
+        </mat-form-field>
+        <mat-checkbox class="span-2" formControlName="batBuoc">Bắt buộc</mat-checkbox>
+        <div class="actions">
+          <button mat-raised-button color="primary" (click)="save()" [disabled]="form.invalid">
+            Lưu học phần
+          </button>
+        </div>
+      </form>
+
+      <mat-divider class="divider"></mat-divider>
+
+      <table mat-table [dataSource]="dataSource" class="full-width-table">
+        <ng-container matColumnDef="maHP">
+          <th mat-header-cell *matHeaderCellDef>Mã HP</th>
+          <td mat-cell *matCellDef="let c">{{ c.maHP }}</td>
+        </ng-container>
+        <ng-container matColumnDef="tenHP">
+          <th mat-header-cell *matHeaderCellDef>Tên học phần</th>
+          <td mat-cell *matCellDef="let c">{{ c.tenHP }}</td>
+        </ng-container>
+        <ng-container matColumnDef="soTinChi">
+          <th mat-header-cell *matHeaderCellDef>TC</th>
+          <td mat-cell *matCellDef="let c">{{ c.soTinChi }}</td>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Thao tác</th>
+          <td mat-cell *matCellDef="let c">
+            <button mat-button color="primary" (click)="edit(c)">Sửa</button>
+            <button mat-button color="warn" (click)="delete(c.maHP)">Xóa</button>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator
+        [length]="totalRecords"
+        [pageIndex]="pageIndex"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="pageSizeOptions"
+        [showFirstLastButtons]="true"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,172 @@
+<div class="dashboard">
+  <header class="hero">
+    <div class="hero-text">
+      <p class="eyebrow">Bảng điều khiển</p>
+      <h1>Xin chào, {{ (currentUser$ | async)?.fullName }}!</h1>
+      <p class="sub">Quản lý học tập và vận hành đào tạo tập trung, theo vai trò: <span class="role-chip">{{ (currentUser$ | async)?.role }}</span></p>
+    </div>
+    <div class="hero-actions">
+      <button mat-stroked-button color="primary" routerLink="/profile">Hồ sơ của tôi</button>
+      <button mat-flat-button color="warn" (click)="logout()">Đăng xuất</button>
+    </div>
+  </header>
+
+  <section *ngIf="(currentUser$ | async)?.role === 'SINHVIEN'">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Sinh viên</p>
+        <h2>Tiện ích học tập</h2>
+        <p class="sub">Đăng ký, xem điểm, thanh toán, tiến độ chương trình.</p>
+      </div>
+    </div>
+    <div class="card-grid">
+      <mat-card class="card">
+        <div class="card-icon primary"><mat-icon>assignment</mat-icon></div>
+        <div class="card-body">
+          <h3>Đăng ký học phần</h3>
+          <p>Quản lý đăng ký tín chỉ học kỳ mới.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/enrollment">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon success"><mat-icon>grade</mat-icon></div>
+        <div class="card-body">
+          <h3>Bảng điểm</h3>
+          <p>Tra cứu kết quả học tập và lịch sử điểm.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/grades">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon accent"><mat-icon>payment</mat-icon></div>
+        <div class="card-body">
+          <h3>Công nợ & Thanh toán</h3>
+          <p>Xem công nợ, hạn thanh toán, VNPay.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/payments">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon neutral"><mat-icon>school</mat-icon></div>
+        <div class="card-body">
+          <h3>Chương trình khung</h3>
+          <p>Tiến độ CTĐT, môn đã/đang/hết hạn.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/my-curriculum">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon warning"><mat-icon>balance</mat-icon></div>
+        <div class="card-body">
+          <h3>Phúc khảo</h3>
+          <p>Gửi yêu cầu và theo dõi trạng thái phúc khảo.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/grade-appeal">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon info"><mat-icon>workspace_premium</mat-icon></div>
+        <div class="card-body">
+          <h3>Xét tốt nghiệp</h3>
+          <p>Kiểm tra điều kiện tốt nghiệp.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/graduation">Truy cập</button>
+      </mat-card>
+    </div>
+  </section>
+
+  <section *ngIf="(currentUser$ | async)?.role === 'GIANGVIEN'">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Giảng viên</p>
+        <h2>Công cụ giảng dạy</h2>
+        <p class="sub">Hồ sơ, lớp phụ trách, nhập điểm.</p>
+      </div>
+    </div>
+    <div class="card-grid">
+      <mat-card class="card">
+        <div class="card-icon primary"><mat-icon>person</mat-icon></div>
+        <div class="card-body">
+          <h3>Hồ sơ giảng viên</h3>
+          <p>Thông tin cá nhân, bộ môn.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/lecturer-profile">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon info"><mat-icon>class</mat-icon></div>
+        <div class="card-body">
+          <h3>Lớp phụ trách</h3>
+          <p>Danh sách lớp và lịch dạy.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/lecturer/classes">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon success"><mat-icon>edit</mat-icon></div>
+        <div class="card-body">
+          <h3>Nhập điểm</h3>
+          <p>Quá trình, giữa kỳ, cuối kỳ.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/lecturer/classes">Truy cập</button>
+      </mat-card>
+    </div>
+  </section>
+
+  <section *ngIf="(currentUser$ | async)?.role === 'ADMIN'">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">Admin</p>
+        <h2>Vận hành & cấu hình</h2>
+        <p class="sub">Mở lớp, CTĐT, người dùng, đơn giá.</p>
+      </div>
+    </div>
+    <div class="card-grid">
+      <mat-card class="card">
+        <div class="card-icon primary"><mat-icon>library_add</mat-icon></div>
+        <div class="card-body">
+          <h3>Quản lý lớp học phần</h3>
+          <p>Mở lớp, phân công GV, phòng, ca.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/class-management">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon accent"><mat-icon>payments</mat-icon></div>
+        <div class="card-body">
+          <h3>Học phần & Đơn giá</h3>
+          <p>Cấu hình môn, đơn giá/TC, hạn nộp.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/admin/tuition">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon info"><mat-icon>groups</mat-icon></div>
+        <div class="card-body">
+          <h3>Người dùng & phân quyền</h3>
+          <p>Thêm, sửa, khóa tài khoản.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/admin/users">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon success"><mat-icon>timeline</mat-icon></div>
+        <div class="card-body">
+          <h3>Chương trình đào tạo</h3>
+          <p>CTĐT, học phần, tiên quyết.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/admin/training-program">Truy cập</button>
+      </mat-card>
+
+      <mat-card class="card">
+        <div class="card-icon warning"><mat-icon>history</mat-icon></div>
+        <div class="card-body">
+          <h3>Nhật ký hệ thống</h3>
+          <p>Theo dõi hoạt động gần nhất.</p>
+        </div>
+        <button mat-button color="primary" routerLink="/admin/logs">Truy cập</button>
+      </mat-card>
+    </div>
+  </section>
+</div>

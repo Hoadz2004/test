@@ -1,0 +1,60 @@
+<div class="container">
+    <div class="header">
+        <h1>Lớp Học Phần Phụ Trách</h1>
+    </div>
+
+    <mat-card>
+        <mat-card-content>
+            <div *ngIf="isLoading" class="loading-shade">
+                <mat-spinner></mat-spinner>
+            </div>
+
+            <table mat-table [dataSource]="classes" class="mat-elevation-z8" *ngIf="!isLoading">
+
+                <!-- Ma LHP Column -->
+                <ng-container matColumnDef="maLHP">
+                    <th mat-header-cell *matHeaderCellDef> Mã LHP </th>
+                    <td mat-cell *matCellDef="let element"> {{element.maLHP}} </td>
+                </ng-container>
+
+                <!-- Ten HP Column -->
+                <ng-container matColumnDef="tenHP">
+                    <th mat-header-cell *matHeaderCellDef> Tên Học Phần </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tenHP}} ({{element.soTinChi}} TC) </td>
+                </ng-container>
+
+                <!-- Phong/Ca Column -->
+                <ng-container matColumnDef="thoiGian">
+                    <th mat-header-cell *matHeaderCellDef> Thời Gian </th>
+                    <td mat-cell *matCellDef="let element">
+                        Thứ {{element.thuTrongTuan}} - {{element.maCa}} (Phòng {{element.maPhong}})
+                    </td>
+                </ng-container>
+
+                <!-- Si So Column -->
+                <ng-container matColumnDef="siSo">
+                    <th mat-header-cell *matHeaderCellDef> Sĩ Số </th>
+                    <td mat-cell *matCellDef="let element"> {{element.siSoThucTe}} / {{element.siSoToiDa}} </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef> Thao Tác </th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button color="primary" [routerLink]="['/lecturer/grades', element.maLHP]">
+                            <mat-icon>edit_note</mat-icon> Nhập Điểm
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <div *ngIf="!isLoading && classes.length === 0" class="no-data">
+                <p>Hiện chưa có lớp học phần nào được phân công.</p>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+</div>

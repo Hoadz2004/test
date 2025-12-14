@@ -1,0 +1,27 @@
+<div class="dashboard-page">
+  <div class="header">
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h2>Tổng quan hệ thống</h2>
+      <p class="sub">Số liệu nhanh và hoạt động gần đây.</p>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <mat-card *ngFor="let s of stats" class="stat-card">
+      <div class="stat-icon"><mat-icon>{{ s.icon }}</mat-icon></div>
+      <div>
+        <p class="stat-label">{{ s.label }}</p>
+        <p class="stat-value">{{ s.value }}</p>
+      </div>
+    </mat-card>
+  </div>
+
+  <mat-card class="activity-card">
+    <mat-card-title>Hoạt động gần đây</mat-card-title>
+    <mat-divider></mat-divider>
+    <ul>
+      <li *ngFor="let a of activities">{{ a }}</li>
+    </ul>
+  </mat-card>
+</div>

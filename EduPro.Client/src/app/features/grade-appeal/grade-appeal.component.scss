@@ -1,0 +1,40 @@
+.grade-appeal-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 24px;
+}
+
+.form-card,
+.list-card {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.full-width {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+table {
+    width: 100%;
+    margin-top: 16px;
+}
+
+.no-data {
+    text-align: center;
+    color: #666;
+    margin-top: 16px;
+    font-style: italic;
+}
+
+.pending {
+    color: #ff9800;
+    font-weight: bold;
+}
+
+.done {
+    color: #4caf50;
+    font-weight: bold;
+}

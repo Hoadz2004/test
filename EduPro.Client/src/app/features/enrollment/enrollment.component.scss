@@ -1,0 +1,45 @@
+.enrollment-container {
+    padding: 20px;
+}
+
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+}
+
+h2 {
+    color: #3f51b5;
+    margin-bottom: 20px;
+}
+
+// Status Badge Styles
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-new {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.status-active {
+    background-color: #e8f5e9;
+    color: #388e3c;
+}
+
+.status-closed {
+    background-color: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.status-cancel {
+    background-color: #ffebee;
+    color: #c62828;
+}

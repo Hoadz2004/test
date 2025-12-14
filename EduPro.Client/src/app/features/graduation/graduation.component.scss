@@ -1,0 +1,85 @@
+.graduation-container {
+    display: flex;
+    justify-content: center;
+    padding: 40px 24px;
+}
+
+.check-card {
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+}
+
+.content-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 200px;
+    justify-content: center;
+    padding: 32px 0;
+}
+
+.large-btn {
+    transform: scale(1.2);
+    margin-top: 16px;
+}
+
+.initial-state p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.result-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.status-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+}
+
+.success {
+    color: #2e7d32;
+
+    .status-icon {
+        color: #4caf50;
+    }
+}
+
+.fail {
+    color: #c62828;
+
+    .status-icon {
+        color: #f44336;
+    }
+}
+
+h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.reason {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.meta {
+    font-size: 14px;
+    color: #888;
+}

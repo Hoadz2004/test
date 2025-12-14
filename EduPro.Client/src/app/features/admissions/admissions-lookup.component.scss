@@ -1,0 +1,12 @@
+.lookup-page {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 16px;
+}
+.form-row { display: flex; gap: 12px; align-items: flex-end; }
+.result { margin-top: 12px; background: #f6f6f6; padding: 12px; border-radius: 6px; }
+.notfound { margin-top: 12px; color: #b00020; }
+
+@media (max-width: 768px) {
+  .form-row { flex-direction: column; align-items: stretch; }
+}

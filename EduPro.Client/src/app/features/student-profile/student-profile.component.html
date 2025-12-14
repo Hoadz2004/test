@@ -1,0 +1,116 @@
+<div class="profile-container" *ngIf="profile">
+    <mat-card class="profile-card">
+        <mat-card-header>
+            <div mat-card-avatar class="profile-avatar-icon">
+                <mat-icon>person</mat-icon>
+            </div>
+            <mat-card-title>{{ profile.hoTen }}</mat-card-title>
+            <mat-card-subtitle>{{ profile.maSV }} - {{ profile.trangThai }}</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <!-- View Mode -->
+            <div class="info-grid" *ngIf="!isEditing">
+                <div class="info-item">
+                    <span class="label">Ngày Sinh:</span>
+                    <span class="value" [class.not-updated]="isDefaultDate(profile.ngaySinh)">{{
+                        formatDate(profile.ngaySinh) }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Giới Tính:</span>
+                    <span class="value" [class.not-updated]="!profile.gioiTinh">{{ displayValue(profile.gioiTinh)
+                        }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Email:</span>
+                    <span class="value" [class.not-updated]="!profile.email">{{ displayValue(profile.email) }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Điện Thoại:</span>
+                    <span class="value" [class.not-updated]="!profile.dienThoai">{{ displayValue(profile.dienThoai)
+                        }}</span>
+                </div>
+                <div class="info-item full-width">
+                    <span class="label">Địa Chỉ:</span>
+                    <span class="value" [class.not-updated]="!profile.diaChi">{{ displayValue(profile.diaChi) }}</span>
+                </div>
+
+                <mat-divider class="divider"></mat-divider>
+
+                <div class="info-item">
+                    <span class="label">Lớp:</span>
+                    <span class="value">{{ displayValue(profile.lopHanhChinh) }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Ngành:</span>
+                    <span class="value">{{ displayValue(profile.tenNganh) }}</span>
+                </div>
+                <div class="info-item">
+                    <span class="label">Khoa (Khóa):</span>
+                    <span class="value">{{ displayValue(profile.tenKhoaTS) }}</span>
+                </div>
+            </div>
+
+            <!-- Edit Mode -->
+            <div class="edit-form" *ngIf="isEditing">
+                <h3>Cập nhật thông tin cá nhân</h3>
+                <div class="form-grid">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input matInput [(ngModel)]="editData.email" type="email">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Điện Thoại</mat-label>
+                        <input matInput [(ngModel)]="editData.dienThoai">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Ngày Sinh</mat-label>
+                        <input matInput [matDatepicker]="picker" [(ngModel)]="editData.ngaySinh">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Giới Tính</mat-label>
+                        <mat-select [(ngModel)]="editData.gioiTinh">
+                            <mat-option value="Nam">Nam</mat-option>
+                            <mat-option value="Nữ">Nữ</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="full-width">
+                        <mat-label>Địa Chỉ</mat-label>
+                        <input matInput [(ngModel)]="editData.diaChi">
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+
+        <mat-card-actions align="end">
+            <button mat-raised-button color="primary" *ngIf="!isEditing" (click)="toggleEdit()">
+                <mat-icon>edit</mat-icon> Chỉnh sửa
+            </button>
+            <button mat-raised-button color="accent" *ngIf="isEditing" (click)="saveProfile()" [disabled]="saving">
+                {{ saving ? 'Đang lưu...' : 'Lưu thay đổi' }}
+            </button>
+            <button mat-button *ngIf="isEditing" (click)="toggleEdit()">Hủy</button>
+            <button mat-stroked-button routerLink="/profile/change-password">
+                <mat-icon>lock</mat-icon> Đổi mật khẩu
+            </button>
+            <button mat-button color="primary" routerLink="/dashboard">
+                <mat-icon>arrow_back</mat-icon> Quay lại
+            </button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+
+<div class="loading-container" *ngIf="!profile && !error">
+    <mat-spinner diameter="40"></mat-spinner>
+</div>
+
+<div class="error-container" *ngIf="error">
+    <p>{{ error }}</p>
+    <button mat-button color="warn" routerLink="/dashboard">Quay lại Dashboard</button>
+</div>
