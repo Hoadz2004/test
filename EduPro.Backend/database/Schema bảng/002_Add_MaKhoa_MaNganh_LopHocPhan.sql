@@ -1,0 +1,21 @@
+USE EduProDb;
+GO
+
+-- Thêm cột MaKhoa, MaNganh vào LopHocPhan (nullable) để FE có thể preselect Khoa/Ngành
+IF NOT EXISTS (
+    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'LopHocPhan' AND COLUMN_NAME = 'MaKhoa'
+)
+BEGIN
+    ALTER TABLE LopHocPhan ADD MaKhoa NVARCHAR(20) NULL;
+END
+GO
+
+IF NOT EXISTS (
+    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS 
+    WHERE TABLE_NAME = 'LopHocPhan' AND COLUMN_NAME = 'MaNganh'
+)
+BEGIN
+    ALTER TABLE LopHocPhan ADD MaNganh NVARCHAR(20) NULL;
+END
+GO

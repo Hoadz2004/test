@@ -1,0 +1,11 @@
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\bin\Debug\net9.0\EduPro.Domain.deps.json
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\bin\Debug\net9.0\EduPro.Domain.dll
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\bin\Debug\net9.0\EduPro.Domain.pdb
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\obj\Debug\net9.0\EduPro.Domain.GeneratedMSBuildEditorConfig.editorconfig
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\obj\Debug\net9.0\EduPro.Domain.AssemblyInfoInputs.cache
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\obj\Debug\net9.0\EduPro.Domain.AssemblyInfo.cs
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\obj\Debug\net9.0\EduPro.Domain.csproj.CoreCompileInputs.cache
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\obj\Debug\net9.0\EduPro.Domain.dll
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\obj\Debug\net9.0\refint\EduPro.Domain.dll
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\obj\Debug\net9.0\EduPro.Domain.pdb
+D:\EduPro\EduPro.Backend\src\EduPro.Domain\obj\Debug\net9.0\ref\EduPro.Domain.dll

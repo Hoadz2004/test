@@ -1,0 +1,15 @@
+D:\EduPro\EduPro.Backend\src\EduPro.Application\bin\Debug\net9.0\EduPro.Application.deps.json
+D:\EduPro\EduPro.Backend\src\EduPro.Application\bin\Debug\net9.0\EduPro.Application.dll
+D:\EduPro\EduPro.Backend\src\EduPro.Application\bin\Debug\net9.0\EduPro.Application.pdb
+D:\EduPro\EduPro.Backend\src\EduPro.Application\bin\Debug\net9.0\EduPro.Domain.dll
+D:\EduPro\EduPro.Backend\src\EduPro.Application\bin\Debug\net9.0\EduPro.Domain.pdb
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\EduPro.Application.csproj.AssemblyReference.cache
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\EduPro.Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\EduPro.Application.AssemblyInfoInputs.cache
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\EduPro.Application.AssemblyInfo.cs
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\EduPro.Application.csproj.CoreCompileInputs.cache
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\EduPro.A.AE1ED437.Up2Date
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\EduPro.Application.dll
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\refint\EduPro.Application.dll
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\EduPro.Application.pdb
+D:\EduPro\EduPro.Backend\src\EduPro.Application\obj\Debug\net9.0\ref\EduPro.Application.dll

@@ -1,0 +1,555 @@
+-- -- =============================================
+-- -- DỮ LIỆU MẪU: NGƯỜI DÙNG (Giảng viên, Sinh viên)
+-- -- =============================================
+
+-- USE EduProDb;
+-- GO
+
+-- SET QUOTED_IDENTIFIER ON;
+-- GO
+
+-- -- =============================================
+-- -- CLEAN UP DỮ LIỆU CŨ TRƯỚC KHI INSERT
+-- -- =============================================
+
+-- -- Xóa các bảng liên quan có FK constraint
+-- DELETE FROM YeuCauDacBiet;
+-- DELETE FROM CongNo;
+-- DELETE FROM ThongBao_NguoiNhan;
+-- DELETE FROM TaiKhoan;
+-- DELETE FROM DangKyHocPhan;
+-- DELETE FROM LopHocPhan;
+-- DELETE FROM SinhVien_TrangThai;
+-- DELETE FROM SinhVien;
+-- DELETE FROM GiangVien;
+
+-- PRINT N'✓ Đã xóa dữ liệu cũ';
+-- GO
+
+-- -- =============================================
+-- -- FIX CONSTRAINTS TRƯỚC KHI INSERT
+-- -- =============================================
+
+-- -- Fix CK_SinhVien_GioiTinh
+-- IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME = 'SinhVien' AND CONSTRAINT_NAME = 'CK_SinhVien_GioiTinh')
+-- BEGIN
+--     ALTER TABLE SinhVien DROP CONSTRAINT CK_SinhVien_GioiTinh;
+-- END
+-- GO
+
+-- ALTER TABLE SinhVien 
+-- ADD CONSTRAINT CK_SinhVien_GioiTinh 
+-- CHECK (GioiTinh IS NULL OR GioiTinh IN (N'Khác', N'Nữ', N'Nam'));
+
+-- PRINT N'✓ Fixed CK_SinhVien_GioiTinh';
+-- GO
+
+-- -- Fix CK_SinhVien_TrangThai
+-- IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE TABLE_NAME = 'SinhVien' AND CONSTRAINT_NAME = 'CK_SinhVien_TrangThai')
+-- BEGIN
+--     ALTER TABLE SinhVien DROP CONSTRAINT CK_SinhVien_TrangThai;
+-- END
+-- GO
+
+-- ALTER TABLE SinhVien 
+-- ADD CONSTRAINT CK_SinhVien_TrangThai 
+-- CHECK (TrangThai IN (N'Tốt nghiệp', N'Đang học', N'Bảo lưu', N'Đợi'));
+
+-- PRINT N'✓ Fixed CK_SinhVien_TrangThai';
+-- GO
+
+-- -- 1. GIANG VIEN (Lecturers)
+-- INSERT INTO
+--     GiangVien (
+--         MaGV,
+--         HoTen,
+--         Email,
+--         DienThoai,
+--         MaKhoa
+--     )
+-- VALUES (
+--         'GV001',
+--         N'TS. Nguyễn Văn An',
+--         'nva@edupro.edu.vn',
+--         '0901234567',
+--         'CNTT'
+--     ),
+--     (
+--         'GV002',
+--         N'ThS. Trần Thị Bình',
+--         'ttb@edupro.edu.vn',
+--         '0902234567',
+--         'CNTT'
+--     ),
+--     (
+--         'GV003',
+--         N'TS. Lê Hoàng Cường',
+--         'lhc@edupro.edu.vn',
+--         '0903234567',
+--         'CNTT'
+--     ),
+--     (
+--         'GV004',
+--         N'ThS. Phạm Thị Dung',
+--         'ptd@edupro.edu.vn',
+--         '0904234567',
+--         'CNTT'
+--     ),
+--     (
+--         'GV005',
+--         N'PGS.TS. Hoàng Văn Em',
+--         'hve@edupro.edu.vn',
+--         '0905234567',
+--         'CNTT'
+--     ),
+--     (
+--         'GV006',
+--         N'ThS. Vũ Thị Phương',
+--         'vtp@edupro.edu.vn',
+--         '0906234567',
+--         'KTTT'
+--     ),
+--     (
+--         'GV007',
+--         N'TS. Dương Minh Giang',
+--         'dmg@edupro.edu.vn',
+--         '0907234567',
+--         'QT'
+--     ),
+--     (
+--         'GV008',
+--         N'ThS. Bùi Thị Hà',
+--         'bth@edupro.edu.vn',
+--         '0908234567',
+--         'NN'
+--     ),
+--     (
+--         'GV009',
+--         N'TS. Ngô Văn Khánh',
+--         'nvk@edupro.edu.vn',
+--         '0909234567',
+--         'CNTT'
+--     ),
+--     (
+--         'GV010',
+--         N'ThS. Phan Thị Lan',
+--         'ptl@edupro.edu.vn',
+--         '0910234567',
+--         'CNTT'
+--     );
+
+-- -- 2. SINH VIEN (Students)
+-- INSERT INTO
+--     SinhVien (
+--         MaSV,
+--         HoTen,
+--         NgaySinh,
+--         GioiTinh,
+--         DiaChi,
+--         Email,
+--         DienThoai,
+--         MaNganh,
+--         MaKhoaTS,
+--         LopHanhChinh,
+--         TrangThai
+--     )
+-- VALUES
+--     -- Khóa 2022 - Đang học năm 3
+--     (
+--         '2022001',
+--         N'Nguyễn Minh Anh',
+--         '2004-03-15',
+--         N'Nam',
+--         N'Hà Nội',
+--         'nma2022@student.edu.vn',
+--         '0981111001',
+--         'CNTT01',
+--         'K2022',
+--         N'CNTT01-K22',
+--         N'Đang học'
+--     ),
+--     (
+--         '2022002',
+--         N'Trần Thị Báo',
+--         '2004-05-20',
+--         N'Nữ',
+--         N'Hải Phòng',
+--         'ttb2022@student.edu.vn',
+--         '0981111002',
+--         'CNTT01',
+--         'K2022',
+--         N'CNTT01-K22',
+--         N'Đang học'
+--     ),
+--     (
+--         '2022003',
+--         N'Lê Văn Cường',
+--         '2004-01-10',
+--         N'Nam',
+--         N'Hà Nam',
+--         'lvc2022@student.edu.vn',
+--         '0981111003',
+--         'CNTT01',
+--         'K2022',
+--         N'CNTT01-K22',
+--         N'Đang học'
+--     ),
+--     (
+--         '2022004',
+--         N'Phạm Thị Dung',
+--         '2004-07-25',
+--         N'Nữ',
+--         N'Nam Định',
+--         'ptd2022@student.edu.vn',
+--         '0981111004',
+--         'CNTT01',
+--         'K2022',
+--         N'CNTT01-K22',
+--         N'Đang học'
+--     ),
+--     (
+--         '2022005',
+--         N'Hoàng Văn Em',
+--         '2004-11-30',
+--         N'Nam',
+--         N'Thái Bình',
+--         'hve2022@student.edu.vn',
+--         '0981111005',
+--         'CNTT01',
+--         'K2022',
+--         N'CNTT01-K22',
+--         N'Đang học'
+--     ),
+--     (
+--         '2022006',
+--         N'Vũ Thị Phương',
+--         '2004-02-14',
+--         N'Nữ',
+--         N'Bắc Ninh',
+--         'vtp2022@student.edu.vn',
+--         '0981111006',
+--         'KTPM01',
+--         'K2022',
+--         N'KTPM01-K22',
+--         N'Đang học'
+--     ),
+--     (
+--         '2022007',
+--         N'Dương Minh Giang',
+--         '2004-09-18',
+--         N'Nam',
+--         N'Hà Nội',
+--         'dmg2022@student.edu.vn',
+--         '0981111007',
+--         'KTPM01',
+--         'K2022',
+--         N'KTPM01-K22',
+--         N'Đang học'
+--     ),
+--     (
+--         '2022008',
+--         N'Bùi Thị Hà',
+--         '2004-04-22',
+--         N'Nữ',
+--         N'Hưng Yên',
+--         'bth2022@student.edu.vn',
+--         '0981111008',
+--         'KTPM01',
+--         'K2022',
+--         N'KTPM01-K22',
+--         N'Đang học'
+--     ),
+
+-- -- Khóa 2023 - Đang học năm 2
+-- (
+--     '2023001',
+--     N'Ngô Văn Khánh',
+--     '2005-06-12',
+--     N'Nam',
+--     N'Hà Nội',
+--     'nvk2023@student.edu.vn',
+--     '0982222001',
+--     'CNTT01',
+--     'K2023',
+--     N'CNTT01-K23',
+--     N'Đang học'
+-- ),
+-- (
+--     '2023002',
+--     N'Phan Thị Lan',
+--     '2005-08-17',
+--     N'Nữ',
+--     N'Hải Dương',
+--     'ptl2023@student.edu.vn',
+--     '0982222002',
+--     'CNTT01',
+--     'K2023',
+--     N'CNTT01-K23',
+--     N'Đang học'
+-- ),
+-- (
+--     '2023003',
+--     N'Trịnh Văn Minh',
+--     '2005-03-25',
+--     N'Nam',
+--     N'Ninh Bình',
+--     'tvm2023@student.edu.vn',
+--     '0982222003',
+--     'CNTT01',
+--     'K2023',
+--     N'CNTT01-K23',
+--     N'Đang học'
+-- ),
+-- (
+--     '2023004',
+--     N'Đỗ Thị Ngọc',
+--     '2005-12-08',
+--     N'Nữ',
+--     N'Vĩnh Phúc',
+--     'dtn2023@student.edu.vn',
+--     '0982222004',
+--     'CNTT01',
+--     'K2023',
+--     N'CNTT01-K23',
+--     N'Đang học'
+-- ),
+-- (
+--     '2023005',
+--     N'Mai Văn Ơn',
+--     '2005-05-15',
+--     N'Nam',
+--     N'Hà Nội',
+--     'mvo2023@student.edu.vn',
+--     '0982222005',
+--     'KTPM01',
+--     'K2023',
+--     N'KTPM01-K23',
+--     N'Đang học'
+-- ),
+-- (
+--     '2023006',
+--     N'Lý Thị Phương',
+--     '2005-10-20',
+--     N'Nữ',
+--     N'Hà Tây',
+--     'ltp2023@student.edu.vn',
+--     '0982222006',
+--     'KTPM01',
+--     'K2023',
+--     N'KTPM01-K23',
+--     N'Đang học'
+-- ),
+-- (
+--     '2023007',
+--     N'Chu Minh Quân',
+--     '2005-01-28',
+--     N'Nam',
+--     N'Hà Nội',
+--     'cmq2023@student.edu.vn',
+--     '0982222007',
+--     'KHMT01',
+--     'K2023',
+--     N'KHMT01-K23',
+--     N'Đang học'
+-- ),
+-- (
+--     '2023008',
+--     N'Đinh Thị Rằng',
+--     '2005-07-11',
+--     N'Nữ',
+--     N'Phú Thọ',
+--     'dtr2023@student.edu.vn',
+--     '0982222008',
+--     'KHMT01',
+--     'K2023',
+--     N'KHMT01-K23',
+--     N'Đang học'
+-- ),
+
+-- -- Khóa 2024 - Đang học năm 1
+-- (
+--     '2024001',
+--     N'Hà Văn Sơn',
+--     '2006-04-16',
+--     N'Nam',
+--     N'Hà Nội',
+--     'hvs2024@student.edu.vn',
+--     '0983333001',
+--     'CNTT01',
+--     'K2024',
+--     N'CNTT01-K24',
+--     N'Đang học'
+-- ),
+-- (
+--     '2024002',
+--     N'Nguyễn Thị Tâm',
+--     '2006-09-22',
+--     N'Nữ',
+--     N'Hòa Bình',
+--     'ntt2024@student.edu.vn',
+--     '0983333002',
+--     'CNTT01',
+--     'K2024',
+--     N'CNTT01-K24',
+--     N'Đang học'
+-- ),
+-- (
+--     '2024003',
+--     N'Trương Văn Uy',
+--     '2006-02-05',
+--     N'Nam',
+--     N'Hà Nội',
+--     'tvu2024@student.edu.vn',
+--     '0983333003',
+--     'CNTT01',
+--     'K2024',
+--     N'CNTT01-K24',
+--     N'Đang học'
+-- ),
+-- (
+--     '2024004',
+--     N'Cao Thị Vân',
+--     '2006-11-19',
+--     N'Nữ',
+--     N'Bắc Giang',
+--     'ctv2024@student.edu.vn',
+--     '0983333004',
+--     'CNTT01',
+--     'K2024',
+--     N'CNTT01-K24',
+--     N'Đang học'
+-- ),
+-- (
+--     '2024005',
+--     N'Lương Minh Xuân',
+--     '2006-06-30',
+--     N'Nam',
+--     N'Hà Nội',
+--     'lmx2024@student.edu.vn',
+--     '0983333005',
+--     'KTPM01',
+--     'K2024',
+--     N'KTPM01-K24',
+--     N'Đang học'
+-- ),
+-- (
+--     '2024006',
+--     N'Đoàn Thị Yến',
+--     '2006-03-14',
+--     N'Nữ',
+--     N'Quảng Ninh',
+--     'dty2024@student.edu.vn',
+--     '0983333006',
+--     'KTPM01',
+--     'K2024',
+--     N'KTPM01-K24',
+--     N'Đang học'
+-- ),
+-- (
+--     '2024007',
+--     N'Võ Văn Anh',
+--     '2006-08-08',
+--     N'Nam',
+--     N'Hà Nội',
+--     'vva2024@student.edu.vn',
+--     '0983333007',
+--     'TCNH01',
+--     'K2024',
+--     N'TCNH01-K24',
+--     N'Đang học'
+-- ),
+-- (
+--     '2024008',
+--     N'Kiều Thị Bích',
+--     '2006-12-25',
+--     N'Nữ',
+--     N'Thái Nguyên',
+--     'ktb2024@student.edu.vn',
+--     '0983333008',
+--     'QTKD01',
+--     'K2024',
+--     N'QTKD01-K24',
+--     N'Đang học'
+-- ),
+
+-- -- Sinh viên có trạng thái đặc biệt
+-- (
+--     '2022009',
+--     N'Đoàn Văn Chiến',
+--     '2004-10-05',
+--     N'Nam',
+--     N'Hà Nội',
+--     'dvc2022@student.edu.vn',
+--     '0981111009',
+--     'CNTT01',
+--     'K2022',
+--     N'CNTT01-K22',
+--     N'Bảo lưu'
+-- ),
+-- (
+--     '2021001',
+--     N'Hoàng Thị Duyên',
+--     '2003-05-15',
+--     N'Nữ',
+--     N'Hà Nội',
+--     'htd2021@student.edu.vn',
+--     '0980000001',
+--     'CNTT01',
+--     'K2021',
+--     N'CNTT01-K21',
+--     N'Tốt nghiệp'
+-- );
+
+-- -- 3. SINH VIEN TRANG THAI (Student Status History)
+-- INSERT INTO
+--     SinhVien_TrangThai (
+--         MaSV,
+--         TrangThai,
+--         NgayCapNhat,
+--         GhiChu
+--     )
+-- VALUES (
+--         '2022001',
+--         N'Đang học',
+--         '2022-09-01',
+--         N'Nhập học'
+--     ),
+--     (
+--         '2022002',
+--         N'Đang học',
+--         '2022-09-01',
+--         N'Nhập học'
+--     ),
+--     (
+--         '2022003',
+--         N'Đang học',
+--         '2022-09-01',
+--         N'Nhập học'
+--     ),
+--     (
+--         '2022009',
+--         N'Đang học',
+--         '2022-09-01',
+--         N'Nhập học'
+--     ),
+--     (
+--         '2022009',
+--         N'Bảo lưu',
+--         '2024-01-15',
+--         N'Bảo lưu học kỳ 2 năm 2023-2024'
+--     ),
+--     (
+--         '2021001',
+--         N'Đang học',
+--         '2021-09-01',
+--         N'Nhập học'
+--     ),
+--     (
+--         '2021001',
+--         N'Tốt nghiệp',
+--         '2025-06-30',
+--         N'Hoàn thành chương trình đào tạo'
+--     );
+
+-- PRINT N'✓ Đã insert Giảng viên và Sinh viên thành công!';
+-- GO

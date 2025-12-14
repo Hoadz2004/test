@@ -1,0 +1,100 @@
+CREATE TABLE Khoa (
+    MaKhoa NVARCHAR(10) NOT NULL PRIMARY KEY,
+    TenKhoa NVARCHAR (100) NOT NULL,
+    TrangThai BIT NOT NULL DEFAULT 1,
+    NgayTao DATETIME NOT NULL DEFAULT GETDATE ()
+);
+
+CREATE TABLE Nganh (
+    MaNganh NVARCHAR(10) NOT NULL PRIMARY KEY,
+    TenNganh NVARCHAR (100) NOT NULL,
+    MaKhoa NVARCHAR(10) NOT NULL,
+    TrangThai BIT NOT NULL DEFAULT 1,
+    CONSTRAINT FK_Nganh_Khoa FOREIGN KEY (MaKhoa) REFERENCES Khoa (MaKhoa)
+);
+
+CREATE TABLE KhoaTuyenSinh (
+    MaKhoaTS NVARCHAR(10) NOT NULL PRIMARY KEY,
+    NamBatDau INT NOT NULL,
+    TenKhoaTS NVARCHAR (100) NOT NULL
+);
+
+CREATE TABLE NamHoc (
+    MaNam NVARCHAR(10) NOT NULL PRIMARY KEY,
+    NamBatDau INT NOT NULL,
+    NamKetThuc INT NOT NULL
+);
+
+CREATE TABLE HocKy (
+    MaHK NVARCHAR(10) NOT NULL PRIMARY KEY,
+    TenHK NVARCHAR (50) NOT NULL, -- HK1, HK2, Hè
+    MaNam NVARCHAR(10) NOT NULL,
+    NgayBatDau DATE NOT NULL,
+    NgayKetThuc DATE NOT NULL,
+    ChoPhepDangKy BIT NOT NULL DEFAULT 0,
+    NgayBatDauDangKy DATE NULL,
+    NgayKetThucDangKy DATE NULL,
+    CONSTRAINT FK_HocKy_NamHoc FOREIGN KEY (MaNam) REFERENCES NamHoc (MaNam),
+    CONSTRAINT CK_HocKy_NgayDangKy CHECK (
+        NgayBatDauDangKy IS NULL
+        OR NgayKetThucDangKy IS NULL
+        OR NgayKetThucDangKy >= NgayBatDauDangKy
+    )
+);
+
+CREATE TABLE PhongHoc (
+    MaPhong NVARCHAR(10) NOT NULL PRIMARY KEY,
+    TenPhong NVARCHAR (50) NOT NULL,
+    SucChua INT NOT NULL
+);
+
+CREATE TABLE CaHoc (
+    MaCa NVARCHAR(10) NOT NULL PRIMARY KEY,
+    MoTa NVARCHAR (100) NOT NULL, -- "Tiết 1-3", "Tiết 4-6"
+    GioBatDau TIME NOT NULL,
+    GioKetThuc TIME NOT NULL
+);
+
+CREATE TABLE HocPhan (
+    MaHP NVARCHAR(10) NOT NULL PRIMARY KEY,
+    TenHP NVARCHAR (200) NOT NULL,
+    SoTinChi INT NOT NULL,
+    SoTietLT INT NULL,
+    SoTietTH INT NULL,
+    BatBuoc BIT NOT NULL DEFAULT 1,
+    LoaiHocPhan NVARCHAR (50) NULL DEFAULT N'Lý thuyết'
+);
+
+CREATE TABLE GiangVien (
+    MaGV NVARCHAR(10) NOT NULL PRIMARY KEY,
+    HoTen NVARCHAR (100) NOT NULL,
+    Email NVARCHAR (100) NULL,
+    DienThoai NVARCHAR (20) NULL,
+    MaKhoa NVARCHAR(10) NOT NULL,
+    CONSTRAINT FK_GiangVien_Khoa FOREIGN KEY (MaKhoa) REFERENCES Khoa (MaKhoa)
+);
+
+CREATE TABLE SinhVien (
+    MaSV NVARCHAR(10) NOT NULL PRIMARY KEY,
+    HoTen NVARCHAR (100) NOT NULL,
+    NgaySinh DATE NOT NULL,
+    GioiTinh NVARCHAR (10) NULL, -- "Nam", "Nữ"
+    DiaChi NVARCHAR (200) NULL,
+    Email NVARCHAR (100) NULL,
+    DienThoai NVARCHAR (20) NULL,
+    MaNganh NVARCHAR(10) NOT NULL,
+    MaKhoaTS NVARCHAR(10) NOT NULL,
+    LopHanhChinh NVARCHAR (50) NULL,
+    TrangThai NVARCHAR (50) NOT NULL DEFAULT N'Đang học', -- Đang học, Bảo lưu, Thôi học, Tốt nghiệp
+    CONSTRAINT FK_SinhVien_Nganh FOREIGN KEY (MaNganh) REFERENCES Nganh (MaNganh),
+    CONSTRAINT FK_SinhVien_KTS FOREIGN KEY (MaKhoaTS) REFERENCES KhoaTuyenSinh (MaKhoaTS)
+);
+
+CREATE TABLE SinhVien_TrangThai (
+    Id INT IDENTITY (1, 1) PRIMARY KEY,
+    MaSV NVARCHAR(10) NOT NULL,
+    TrangThai NVARCHAR (50) NOT NULL,
+    NgayCapNhat DATETIME NOT NULL DEFAULT GETDATE (),
+    GhiChu NVARCHAR (200) NULL,
+    CONSTRAINT FK_SVTrangThai_SV FOREIGN KEY (MaSV) REFERENCES SinhVien (MaSV)
+);
